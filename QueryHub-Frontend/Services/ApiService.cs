@@ -343,7 +343,7 @@ namespace QueryHub_Frontend.Services
                 Title = apiModel.Title,
                 Description = apiModel.Body,
                 Tags = apiModel.Tags ?? new List<string>(),
-                Author = $"User {apiModel.UserId}", // We don't have username from backend, so use generic name
+                Author = apiModel.Username,
                 CreatedAt = apiModel.CreatedAt,
                 Votes = apiModel.Votes,
                 Answers = apiModel.Answers?.Count ?? 0, // Count the actual answers from backend
@@ -359,7 +359,7 @@ namespace QueryHub_Frontend.Services
                 Title = apiModel.Title,
                 Description = apiModel.Body,
                 Tags = apiModel.Tags ?? new List<string>(),
-                Author = $"User {apiModel.UserId}",
+                Author = apiModel.Username,
                 CreatedAt = apiModel.CreatedAt,
                 Votes = apiModel.Votes,
                 Views = apiModel.Views,
@@ -400,6 +400,7 @@ namespace QueryHub_Frontend.Services
         public string Title { get; set; } = "";
         public string Body { get; set; } = "";
         public int UserId { get; set; }
+        public string Username { get; set; } = "";
         public int Views { get; set; }
         public int Votes { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -414,6 +415,7 @@ namespace QueryHub_Frontend.Services
         public string Title { get; set; } = "";
         public string Body { get; set; } = "";
         public int UserId { get; set; }
+        public string Username { get; set; } = "";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public int Votes { get; set; }

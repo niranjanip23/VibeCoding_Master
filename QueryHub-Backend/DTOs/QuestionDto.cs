@@ -34,6 +34,7 @@ namespace QueryHub_Backend.DTOs
         public string Title { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
         public int UserId { get; set; }
+        public string Username { get; set; } = string.Empty;
         public int Views { get; set; }
         public int Votes { get; set; }
         public DateTime CreatedAt { get; set; }

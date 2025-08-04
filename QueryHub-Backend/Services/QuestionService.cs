@@ -32,6 +32,7 @@ namespace QueryHub_Backend.Services
             
             var tags = await _tagRepository.GetByQuestionIdAsync(id);
             var answers = await _answerService.GetByQuestionIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(question.UserId);
             
             return new QuestionDto
             {
@@ -39,6 +40,7 @@ namespace QueryHub_Backend.Services
                 Title = question.Title,
                 Body = question.Body,
                 UserId = question.UserId,
+                Username = user?.Username ?? "Unknown User",
                 CreatedAt = question.CreatedAt,
                 UpdatedAt = question.UpdatedAt,
                 Views = question.Views + 1, // Include the incremented view
@@ -57,6 +59,7 @@ namespace QueryHub_Backend.Services
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
                 var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                var user = await _userRepository.GetByIdAsync(question.UserId);
                 
                 questionDtos.Add(new QuestionDto
                 {
@@ -64,6 +67,7 @@ namespace QueryHub_Backend.Services
                     Title = question.Title,
                     Body = question.Body,
                     UserId = question.UserId,
+                    Username = user?.Username ?? "Unknown User",
                     CreatedAt = question.CreatedAt,
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
@@ -85,6 +89,7 @@ namespace QueryHub_Backend.Services
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
                 var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                var user = await _userRepository.GetByIdAsync(question.UserId);
                 
                 questionDtos.Add(new QuestionDto
                 {
@@ -92,6 +97,7 @@ namespace QueryHub_Backend.Services
                     Title = question.Title,
                     Body = question.Body,
                     UserId = question.UserId,
+                    Username = user?.Username ?? "Unknown User",
                     CreatedAt = question.CreatedAt,
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
@@ -113,6 +119,7 @@ namespace QueryHub_Backend.Services
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
                 var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                var user = await _userRepository.GetByIdAsync(question.UserId);
                 
                 questionDtos.Add(new QuestionDto
                 {
@@ -120,6 +127,7 @@ namespace QueryHub_Backend.Services
                     Title = question.Title,
                     Body = question.Body,
                     UserId = question.UserId,
+                    Username = user?.Username ?? "Unknown User",
                     CreatedAt = question.CreatedAt,
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
@@ -141,6 +149,7 @@ namespace QueryHub_Backend.Services
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
                 var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                var user = await _userRepository.GetByIdAsync(question.UserId);
                 
                 questionDtos.Add(new QuestionDto
                 {
@@ -148,6 +157,7 @@ namespace QueryHub_Backend.Services
                     Title = question.Title,
                     Body = question.Body,
                     UserId = question.UserId,
+                    Username = user?.Username ?? "Unknown User",
                     CreatedAt = question.CreatedAt,
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
@@ -196,12 +206,15 @@ namespace QueryHub_Backend.Services
                 }
             }
 
+            var user = await _userRepository.GetByIdAsync(createdQuestion.UserId);
+            
             return new QuestionDto
             {
                 Id = createdQuestion.Id,
                 Title = createdQuestion.Title,
                 Body = createdQuestion.Body,
                 UserId = createdQuestion.UserId,
+                Username = user?.Username ?? "Unknown User",
                 CreatedAt = createdQuestion.CreatedAt,
                 UpdatedAt = createdQuestion.UpdatedAt,
                 Views = createdQuestion.Views,
@@ -256,12 +269,15 @@ namespace QueryHub_Backend.Services
             }
 
             var tags = await _tagRepository.GetByQuestionIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(updatedQuestion.UserId);
+            
             return new QuestionDto
             {
                 Id = updatedQuestion.Id,
                 Title = updatedQuestion.Title,
                 Body = updatedQuestion.Body,
                 UserId = updatedQuestion.UserId,
+                Username = user?.Username ?? "Unknown User",
                 CreatedAt = updatedQuestion.CreatedAt,
                 UpdatedAt = updatedQuestion.UpdatedAt,
                 Views = updatedQuestion.Views,
