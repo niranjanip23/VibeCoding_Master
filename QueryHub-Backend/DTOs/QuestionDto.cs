@@ -39,5 +39,6 @@ namespace QueryHub_Backend.DTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
+        public List<AnswerDto> Answers { get; set; } = new List<AnswerDto>();
     }
 }

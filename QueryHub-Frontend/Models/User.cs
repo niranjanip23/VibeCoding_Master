@@ -26,6 +26,11 @@ namespace QueryHub_Frontend.Models
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        [Display(Name = "Username")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email Address")]
         public string Email { get; set; } = string.Empty;

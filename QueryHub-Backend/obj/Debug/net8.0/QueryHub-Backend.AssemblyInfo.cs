@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QueryHub-Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34f38056973274657d5c8c63141df363e64a01c4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa03f507f6bd6c37198c7ca16f67a2af3adac834")]
 [assembly: System.Reflection.AssemblyProductAttribute("QueryHub-Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QueryHub-Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

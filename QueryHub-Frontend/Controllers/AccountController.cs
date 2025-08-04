@@ -103,7 +103,7 @@ namespace QueryHub_Frontend.Controllers
             {
                 try
                 {
-                    var result = await _apiService.RegisterAsync(model.Name, model.Email, model.Password);
+                    var result = await _apiService.RegisterAsync(model.Name, model.Username, model.Email, model.Password, model.Department);
                     
                     if (result.Success)
                     {

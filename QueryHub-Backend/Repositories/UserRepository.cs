@@ -21,7 +21,7 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, Name, Username, Email, PasswordHash, CreatedAt, Reputation 
+                SELECT Id, Name, Username, Email, PasswordHash, Department, Avatar, Reputation, CreatedAt, UpdatedAt, IsActive 
                 FROM Users 
                 WHERE Id = @id";
             command.Parameters.Add(new SqliteParameter("@id", id));
@@ -42,7 +42,7 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, Name, Username, Email, PasswordHash, CreatedAt, Reputation 
+                SELECT Id, Name, Username, Email, PasswordHash, Department, Avatar, Reputation, CreatedAt, UpdatedAt, IsActive 
                 FROM Users 
                 WHERE Username = @username";
             command.Parameters.Add(new SqliteParameter("@username", username));
@@ -63,7 +63,7 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, Name, Username, Email, PasswordHash, CreatedAt, Reputation 
+                SELECT Id, Name, Username, Email, PasswordHash, Department, Avatar, Reputation, CreatedAt, UpdatedAt, IsActive 
                 FROM Users 
                 WHERE Email = @email";
             command.Parameters.Add(new SqliteParameter("@email", email));
@@ -84,16 +84,20 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                INSERT INTO Users (Name, Username, Email, PasswordHash, CreatedAt, Reputation)
-                VALUES (@name, @username, @email, @passwordHash, @createdAt, @reputation);
+                INSERT INTO Users (Name, Username, Email, PasswordHash, Department, Avatar, Reputation, CreatedAt, UpdatedAt, IsActive)
+                VALUES (@name, @username, @email, @passwordHash, @department, @avatar, @reputation, @createdAt, @updatedAt, @isActive);
                 SELECT last_insert_rowid();";
 
             command.Parameters.Add(new SqliteParameter("@name", user.Name));
             command.Parameters.Add(new SqliteParameter("@username", user.Username));
             command.Parameters.Add(new SqliteParameter("@email", user.Email));
             command.Parameters.Add(new SqliteParameter("@passwordHash", user.PasswordHash));
-            command.Parameters.Add(new SqliteParameter("@createdAt", user.CreatedAt));
+            command.Parameters.Add(new SqliteParameter("@department", user.Department ?? ""));
+            command.Parameters.Add(new SqliteParameter("@avatar", user.Avatar ?? (object)DBNull.Value));
             command.Parameters.Add(new SqliteParameter("@reputation", user.Reputation));
+            command.Parameters.Add(new SqliteParameter("@createdAt", user.CreatedAt));
+            command.Parameters.Add(new SqliteParameter("@updatedAt", user.UpdatedAt));
+            command.Parameters.Add(new SqliteParameter("@isActive", user.IsActive));
 
             var id = Convert.ToInt32(await command.ExecuteScalarAsync());
             user.Id = id;
@@ -183,8 +187,12 @@ namespace QueryHub_Backend.Repositories
                 Username = reader.GetString("Username"),
                 Email = reader.GetString("Email"),
                 PasswordHash = reader.GetString("PasswordHash"),
+                Department = reader.IsDBNull("Department") ? "" : reader.GetString("Department"),
+                Avatar = reader.IsDBNull("Avatar") ? null : reader.GetString("Avatar"),
+                Reputation = reader.GetInt32("Reputation"),
                 CreatedAt = reader.GetDateTime("CreatedAt"),
-                Reputation = reader.GetInt32("Reputation")
+                UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                IsActive = reader.GetBoolean("IsActive")
             };
         }
     }

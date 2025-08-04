@@ -25,7 +25,16 @@ namespace QueryHub_Backend.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    var errors = ModelState
+                        .Where(x => x.Value.Errors.Count > 0)
+                        .Select(x => new { 
+                            Field = x.Key, 
+                            Errors = x.Value.Errors.Select(e => e.ErrorMessage) 
+                        });
+                    return BadRequest(new { 
+                        message = "Validation failed", 
+                        errors = errors 
+                    });
                 }
 
                 var result = await _authService.RegisterAsync(registerDto);
@@ -37,7 +46,11 @@ namespace QueryHub_Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred during registration", error = ex.Message });
+                return StatusCode(500, new { 
+                    message = "An error occurred during registration", 
+                    error = ex.Message,
+                    details = ex.InnerException?.Message 
+                });
             }
         }
 
@@ -51,7 +64,16 @@ namespace QueryHub_Backend.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    var errors = ModelState
+                        .Where(x => x.Value.Errors.Count > 0)
+                        .Select(x => new { 
+                            Field = x.Key, 
+                            Errors = x.Value.Errors.Select(e => e.ErrorMessage) 
+                        });
+                    return BadRequest(new { 
+                        message = "Validation failed", 
+                        errors = errors 
+                    });
                 }
 
                 var result = await _authService.LoginAsync(loginDto);
@@ -63,7 +85,11 @@ namespace QueryHub_Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
+                return StatusCode(500, new { 
+                    message = "An error occurred during login", 
+                    error = ex.Message,
+                    details = ex.InnerException?.Message 
+                });
             }
         }
 

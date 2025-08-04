@@ -9,15 +9,18 @@ namespace QueryHub_Backend.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IAnswerService _answerService;
 
         public QuestionService(
             IQuestionRepository questionRepository,
             ITagRepository tagRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IAnswerService answerService)
         {
             _questionRepository = questionRepository;
             _tagRepository = tagRepository;
             _userRepository = userRepository;
+            _answerService = answerService;
         }
 
         public async Task<QuestionDto?> GetByIdAsync(int id)
@@ -28,6 +31,7 @@ namespace QueryHub_Backend.Services
             await _questionRepository.IncrementViewsAsync(id);
             
             var tags = await _tagRepository.GetByQuestionIdAsync(id);
+            var answers = await _answerService.GetByQuestionIdAsync(id);
             
             return new QuestionDto
             {
@@ -39,7 +43,8 @@ namespace QueryHub_Backend.Services
                 UpdatedAt = question.UpdatedAt,
                 Views = question.Views + 1, // Include the incremented view
                 Votes = question.VoteCount,
-                Tags = tags.Select(t => t.Name).ToList()
+                Tags = tags.Select(t => t.Name).ToList(),
+                Answers = answers.ToList()
             };
         }
 

@@ -22,61 +22,90 @@ namespace QueryHub_Backend.Services
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
         {
-            // Check if user already exists
-            var existingUser = await _userRepository.GetByEmailAsync(registerDto.Email);
-            if (existingUser != null)
+            try
             {
-                throw new InvalidOperationException("User with this email already exists");
+                // Check if user already exists
+                var existingUser = await _userRepository.GetByEmailAsync(registerDto.Email);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("User with this email already exists");
+                }
+
+                existingUser = await _userRepository.GetByUsernameAsync(registerDto.Username);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("User with this username already exists");
+                }
+
+                // Create new user
+                var user = new User
+                {
+                    Name = registerDto.Name,
+                    Username = registerDto.Username,
+                    Email = registerDto.Email,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
+                    Department = registerDto.Department,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    Reputation = 0,
+                    IsActive = true
+                };
+
+                var createdUser = await _userRepository.CreateAsync(user);
+                var token = GenerateJwtToken(createdUser);
+
+                return new AuthResponseDto
+                {
+                    Token = token,
+                    UserId = createdUser.Id,
+                    Username = createdUser.Username,
+                    Email = createdUser.Email,
+                    Reputation = createdUser.Reputation
+                };
             }
-
-            existingUser = await _userRepository.GetByUsernameAsync(registerDto.Username);
-            if (existingUser != null)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException("User with this username already exists");
+                // Log the error for debugging
+                Console.WriteLine($"Registration error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
-
-            // Create new user
-            var user = new User
-            {
-                Name = registerDto.Username, // Use username as name for now
-                Username = registerDto.Username,
-                Email = registerDto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
-                CreatedAt = DateTime.UtcNow,
-                Reputation = 0
-            };
-
-            var createdUser = await _userRepository.CreateAsync(user);
-            var token = GenerateJwtToken(createdUser);
-
-            return new AuthResponseDto
-            {
-                Token = token,
-                UserId = createdUser.Id,
-                Username = createdUser.Username,
-                Email = createdUser.Email,
-                Reputation = createdUser.Reputation
-            };
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)
         {
-            var user = await _userRepository.GetByEmailAsync(loginDto.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            try
             {
-                throw new UnauthorizedAccessException("Invalid email or password");
+                var user = await _userRepository.GetByEmailAsync(loginDto.Email);
+                if (user == null)
+                {
+                    Console.WriteLine($"Login failed: No user found with email {loginDto.Email}");
+                    throw new UnauthorizedAccessException("Invalid email or password");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+                {
+                    Console.WriteLine($"Login failed: Password verification failed for user {loginDto.Email}");
+                    throw new UnauthorizedAccessException("Invalid email or password");
+                }
+
+                var token = GenerateJwtToken(user);
+
+                return new AuthResponseDto
+                {
+                    Token = token,
+                    UserId = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Reputation = user.Reputation
+                };
             }
-
-            var token = GenerateJwtToken(user);
-
-            return new AuthResponseDto
+            catch (Exception ex)
             {
-                Token = token,
-                UserId = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                Reputation = user.Reputation
-            };
+                Console.WriteLine($"Login error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<User?> GetUserByIdAsync(int userId)

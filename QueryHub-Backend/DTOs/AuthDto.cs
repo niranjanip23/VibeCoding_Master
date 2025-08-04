@@ -17,6 +17,10 @@ namespace QueryHub_Backend.DTOs
     {
         [Required]
         [StringLength(100, MinimumLength = 2)]
+        public string Name { get; set; } = string.Empty;
+        
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
         public string Username { get; set; } = string.Empty;
         
         [Required]
@@ -26,6 +30,9 @@ namespace QueryHub_Backend.DTOs
         [Required]
         [StringLength(100, MinimumLength = 6)]
         public string Password { get; set; } = string.Empty;
+        
+        [StringLength(100)]
+        public string Department { get; set; } = string.Empty;
     }
     
     public class AuthResponseDto

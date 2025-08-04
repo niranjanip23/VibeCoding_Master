@@ -41,17 +41,26 @@ namespace QueryHub_Backend.Services
         public async Task<IEnumerable<AnswerDto>> GetByQuestionIdAsync(int questionId)
         {
             var answers = await _answerRepository.GetByQuestionIdAsync(questionId);
-            return answers.Select(answer => new AnswerDto
+            var answerDtos = new List<AnswerDto>();
+            
+            foreach (var answer in answers)
             {
-                Id = answer.Id,
-                Body = answer.Body,
-                QuestionId = answer.QuestionId,
-                UserId = answer.UserId,
-                CreatedAt = answer.CreatedAt,
-                UpdatedAt = answer.UpdatedAt,
-                Votes = answer.VoteCount,
-                IsAccepted = answer.IsAccepted
-            });
+                var user = await _userRepository.GetByIdAsync(answer.UserId);
+                answerDtos.Add(new AnswerDto
+                {
+                    Id = answer.Id,
+                    Body = answer.Body,
+                    QuestionId = answer.QuestionId,
+                    UserId = answer.UserId,
+                    Username = user?.Username ?? "Unknown User",
+                    CreatedAt = answer.CreatedAt,
+                    UpdatedAt = answer.UpdatedAt,
+                    Votes = answer.VoteCount,
+                    IsAccepted = answer.IsAccepted
+                });
+            }
+            
+            return answerDtos;
         }
 
         public async Task<IEnumerable<AnswerDto>> GetByUserIdAsync(int userId)

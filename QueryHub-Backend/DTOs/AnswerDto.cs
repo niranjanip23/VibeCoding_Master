@@ -25,6 +25,7 @@ namespace QueryHub_Backend.DTOs
         public string Body { get; set; } = string.Empty;
         public int QuestionId { get; set; }
         public int UserId { get; set; }
+        public string Username { get; set; } = string.Empty;
         public int Votes { get; set; }
         public bool IsAccepted { get; set; }
         public DateTime CreatedAt { get; set; }

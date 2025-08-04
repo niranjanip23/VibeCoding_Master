@@ -73,11 +73,11 @@ namespace QueryHub_Frontend.Services
             }
         }
 
-        public async Task<AuthResult> RegisterAsync(string name, string email, string password)
+        public async Task<AuthResult> RegisterAsync(string name, string username, string email, string password, string department)
         {
             try
             {
-                var registerRequest = new { Username = name, Email = email, Password = password };
+                var registerRequest = new { Name = name, Username = username, Email = email, Password = password, Department = department };
                 var json = JsonSerializer.Serialize(registerRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
