@@ -1,0 +1,331 @@
+/* QueryHub Custom Styles */
+
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --border-radius: 8px;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0b5ed7 100%);
+    border-radius: var(--border-radius) !important;
+}
+
+/* Card Enhancements */
+.card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.question-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+.question-card:hover {
+    border-left-color: var(--success-color);
+}
+
+/* Question Stats */
+.question-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 0.25rem;
+    border-radius: var(--border-radius);
+    background: var(--light-color);
+}
+
+.stat-item.answered {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.stat-number {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* Voting Section */
+.vote-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.vote-btn {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.vote-btn:hover {
+    transform: scale(1.1);
+}
+
+.vote-count {
+    color: var(--primary-color);
+    text-align: center;
+    min-width: 50px;
+}
+
+/* Question Title */
+.question-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.question-title:hover {
+    color: var(--dark-color);
+    text-decoration: underline !important;
+}
+
+/* Tags */
+.badge {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--border-radius);
+}
+
+.tag-suggestion {
+    margin: 0.25rem 0.25rem 0.25rem 0;
+}
+
+/* Comments */
+.comments-section {
+    border-left: 2px solid var(--light-color);
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+
+.comment {
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+}
+
+.comment-form {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+}
+
+/* Formatted Content */
+.formatted-content {
+    line-height: 1.7;
+}
+
+.formatted-content code {
+    background: #f1f3f4;
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: #d63384;
+}
+
+.formatted-content pre {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* User Info Cards */
+.user-info {
+    max-width: 200px;
+}
+
+.user-info .bg-light {
+    border-radius: var(--border-radius);
+}
+
+/* Navbar Enhancements */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Search Bar */
+.navbar .input-group .form-control {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.navbar .input-group .btn {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer a:hover {
+    color: var(--info-color) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: var(--border-radius);
+    margin: 0 0.125rem;
+    color: var(--primary-color);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Alerts */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--box-shadow);
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Loading States */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(13, 110, 253, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+    }
+    
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .question-stats {
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .vote-section {
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .vote-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .user-info {
+        max-width: 100%;
+        text-align: left !important;
+    }
+}
+
+/* Code Syntax Highlighting Enhancement */
+.hljs {
+    background: #f8f9fa !important;
+    padding: 1rem !important;
+    border-radius: var(--border-radius) !important;
+    border: 1px solid #e9ecef !important;
+}
+
+/* Smooth Transitions */
+* {
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}

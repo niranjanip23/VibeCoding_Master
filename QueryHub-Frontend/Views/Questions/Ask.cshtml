@@ -1,0 +1,133 @@
+@model QueryHub_Frontend.Models.CreateQuestionViewModel
+@{
+    ViewData["Title"] = "Ask a Question";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-plus me-2"></i>Ask a Question</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-lightbulb me-2"></i>Tips for a good question:</h6>
+                    <ul class="mb-0">
+                        <li>Make your title specific and descriptive</li>
+                        <li>Provide detailed context in the description</li>
+                        <li>Add relevant tags to help others find your question</li>
+                        <li>Include code examples if applicable</li>
+                    </ul>
+                </div>
+                
+                <form asp-action="Ask" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label fw-bold">
+                            <i class="fas fa-heading me-1"></i>Question Title *
+                        </label>
+                        <input asp-for="Title" class="form-control form-control-lg" 
+                               placeholder="e.g., How to implement async/await in C#?" 
+                               maxlength="200" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                        <small class="form-text text-muted">Be specific and imagine you're asking a question to another person</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold">
+                            <i class="fas fa-align-left me-1"></i>Question Description *
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="8" 
+                                  placeholder="Provide detailed context, what you've tried, error messages, etc."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <small class="form-text text-muted">
+                            Include all the information someone would need to answer your question. You can use Markdown formatting.
+                        </small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Tags" class="form-label fw-bold">
+                            <i class="fas fa-tags me-1"></i>Tags
+                        </label>
+                        <input asp-for="Tags" class="form-control" 
+                               placeholder="e.g., C#, ASP.NET, JavaScript (comma separated)" />
+                        <span asp-validation-for="Tags" class="text-danger"></span>
+                        <small class="form-text text-muted">Add up to 5 tags to describe what your question is about</small>
+                        
+                        <!-- Popular tags suggestions -->
+                        <div class="mt-2">
+                            <small class="text-muted">Popular tags: </small>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="C#">C#</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="ASP.NET">ASP.NET</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="JavaScript">JavaScript</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="SQL">SQL</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="HTML">HTML</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary tag-suggestion" data-tag="CSS">CSS</button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Post Your Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Markdown Help -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-markdown me-2"></i>Markdown Formatting Help</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Text Formatting:</h6>
+                        <ul class="small">
+                            <li><code>**bold**</code> → <strong>bold</strong></li>
+                            <li><code>*italic*</code> → <em>italic</em></li>
+                            <li><code>`inline code`</code> → <code>inline code</code></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Code Blocks:</h6>
+                        <ul class="small">
+                            <li><code>```csharp</code> for C# code blocks</li>
+                            <li><code>```javascript</code> for JavaScript</li>
+                            <li><code>```sql</code> for SQL queries</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Tag suggestions functionality
+        document.querySelectorAll('.tag-suggestion').forEach(button => {
+            button.addEventListener('click', function() {
+                const tag = this.getAttribute('data-tag');
+                const tagsInput = document.getElementById('Tags');
+                const currentTags = tagsInput.value.trim();
+                
+                if (currentTags === '') {
+                    tagsInput.value = tag;
+                } else if (!currentTags.includes(tag)) {
+                    tagsInput.value = currentTags + ', ' + tag;
+                }
+                
+                this.classList.add('btn-secondary');
+                this.classList.remove('btn-outline-secondary');
+            });
+        });
+    </script>
+}

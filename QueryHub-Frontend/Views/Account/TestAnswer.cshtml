@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Answer Posting Test";
+}
+
+<div class="container mt-4">
+    <h2>Answer Posting Verification</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Test Answer Form</h4>
+            <div class="card">
+                <div class="card-body">
+                    <form asp-controller="Answers" asp-action="Create" method="post">
+                        <input type="hidden" name="questionId" value="1" />
+                        
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Your Answer:</label>
+                            <textarea name="content" id="content" class="form-control" rows="4" 
+                                      placeholder="Write your test answer here (minimum 10 characters)..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>Post Test Answer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <h4>Verification Status</h4>
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Authentication Required:</strong> 
+                        <span class="badge bg-success">NO</span>
+                    </p>
+                    <p><strong>Backend API:</strong> 
+                        <span class="badge bg-success">Working</span>
+                    </p>
+                    <p><strong>Frontend Controller:</strong> 
+                        <span class="badge bg-success">Ready</span>
+                    </p>
+                    <p><strong>View Form:</strong> 
+                        <span class="badge bg-success">Available</span>
+                    </p>
+                    
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success mt-3">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4>Instructions</h4>
+            <ol>
+                <li>Enter some text in the answer box (minimum 10 characters)</li>
+                <li>Click "Post Test Answer"</li>
+                <li>You should see a success message and be redirected back</li>
+                <li>No login should be required</li>
+            </ol>
+            
+            <p class="mt-3">
+                <a href="/Questions/Details/1" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Go to Question 1 Details
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+@model QueryHub_Frontend.Models.User
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    @if (!string.IsNullOrEmpty(Model.Avatar))
+                    {
+                        <img src="@Model.Avatar" alt="Avatar" class="rounded-circle" width="100" height="100" 
+                             onerror="this.src='/images/default-avatar.png'">
+                    }
+                    else
+                    {
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 100px; height: 100px;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
+                    }
+                </div>
+                <h4 class="mb-1">@Model.Name</h4>
+                <p class="text-muted mb-2">@Model.Department</p>
+                <div class="badge bg-warning text-dark fs-6">
+                    <i class="fas fa-star me-1"></i>@Model.Reputation points
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Account Info</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong><br>@Model.Email</p>
+                <p><strong>Department:</strong><br>@Model.Department</p>
+                <p class="mb-0"><strong>Member Since:</strong><br>@Model.JoinedDate.ToString("MMMM yyyy")</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Activity Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-question-circle fa-2x text-primary mb-2"></i>
+                            <h4 class="mb-1">12</h4>
+                            <small class="text-muted">Questions Asked</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-comments fa-2x text-success mb-2"></i>
+                            <h4 class="mb-1">28</h4>
+                            <small class="text-muted">Answers Given</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-thumbs-up fa-2x text-info mb-2"></i>
+                            <h4 class="mb-1">156</h4>
+                            <small class="text-muted">Total Votes</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-check-circle fa-2x text-warning mb-2"></i>
+                            <h4 class="mb-1">15</h4>
+                            <small class="text-muted">Accepted Answers</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Asked a question</div>
+                            <small class="text-muted">"How to implement async/await in C#?"</small>
+                        </div>
+                        <small class="text-muted">2 hours ago</small>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Answered a question</div>
+                            <small class="text-muted">"Best practices for ASP.NET Core MVC?"</small>
+                        </div>
+                        <small class="text-muted">1 day ago</small>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Received upvote</div>
+                            <small class="text-muted">Your answer was upvoted</small>
+                        </div>
+                        <small class="text-muted">2 days ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <a asp-controller="Questions" asp-action="Ask" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>Ask Question
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <a asp-controller="Questions" asp-action="Index" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-search me-2"></i>Browse Questions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

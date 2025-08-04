@@ -1,0 +1,345 @@
+@model QueryHub_Frontend.Models.QuestionDetailViewModel
+@{
+    ViewData["Title"] = Model?.Title ?? "Question Details";
+    
+    // Defensive check for model
+    if (Model == null)
+    {
+        throw new InvalidOperationException("QuestionDetailViewModel model is null");
+    }
+    
+    if (!(Model is QueryHub_Frontend.Models.QuestionDetailViewModel))
+    {
+        throw new InvalidOperationException($"Expected QuestionDetailViewModel but got {Model.GetType().FullName}");
+    }
+}
+
+<!-- Question Header -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="mb-2">@Model.Title</h1>
+                <div class="question-meta text-muted mb-3">
+                    <span class="me-3">
+                        <i class="fas fa-calendar me-1"></i>
+                        Asked @Model.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")
+                    </span>
+                    <span class="me-3">
+                        <i class="fas fa-eye me-1"></i>
+                        Viewed @Model.Views times
+                    </span>
+                </div>
+            </div>
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <a asp-action="Ask" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Ask Question
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Question Content -->
+<div class="row">
+    <div class="col-md-1 text-center">
+        <!-- Voting Section -->
+        <div class="vote-section" data-question-id="@Model.Id">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="btn btn-outline-success btn-lg vote-btn" data-vote="up">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            }
+            else
+            {
+                <div class="btn btn-outline-secondary btn-lg disabled">
+                    <i class="fas fa-chevron-up"></i>
+                </div>
+            }
+            
+            <div class="vote-count my-2 fs-4 fw-bold" id="question-votes-@Model.Id">@Model.Votes</div>
+            
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="btn btn-outline-danger btn-lg vote-btn" data-vote="down">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            }
+            else
+            {
+                <div class="btn btn-outline-secondary btn-lg disabled">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <div class="col-md-11">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <!-- Question Description -->
+                <div class="question-content mb-4">
+                    <div class="formatted-content">
+                        @Html.Raw(Model.Description.Replace("\n", "<br>"))
+                    </div>
+                </div>
+                
+                <!-- Tags -->
+                <div class="mb-3">
+                    @foreach (var tag in Model.TagList)
+                    {
+                        <a asp-controller="Questions" asp-action="Index" asp-route-tag="@tag" 
+                           class="badge bg-secondary text-decoration-none me-1 p-2">@tag</a>
+                    }
+                </div>
+                
+                <!-- Question Author -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="question-actions">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @* Comments temporarily disabled
+                            <button class="btn btn-sm btn-outline-primary me-2" onclick="showCommentForm('question', @Model.Id)">
+                                <i class="fas fa-comment me-1"></i>Add Comment
+                            </button>
+                            *@
+                            <button class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-share me-1"></i>Share
+                            </button>
+                        }
+                    </div>
+                    <div class="user-info text-end">
+                        <div class="bg-light p-3 rounded">
+                            <small class="text-muted">asked by</small><br>
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                                     style="width: 32px; height: 32px;">
+                                    <i class="fas fa-user text-white small"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">@Model.Author</div>
+                                    <small class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comments section temporarily disabled - need to add comments to QuestionDetailViewModel -->
+        @* 
+        <div class="comments-section mt-3" id="question-comments-@Model.Id">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment border-start border-3 border-light ps-3 py-2">
+                    <span class="comment-content">@comment.Content</span>
+                    <small class="text-muted ms-2">
+                        – <strong>@comment.UserName</strong> @comment.CreatedDate.ToString("MMM dd, yyyy 'at' HH:mm")
+                    </small>
+                </div>
+            }
+            
+            <!-- Comment Form (Hidden by default) -->
+            <div class="comment-form mt-2" id="comment-form-question-@Model.Id" style="display: none;">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Add a comment..." maxlength="500">
+                        <button class="btn btn-primary" type="button" onclick="submitComment('question', @Model.Id, this)">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="hideCommentForm('question', @Model.Id)">
+                            Cancel
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+        *@
+    </div>
+</div>
+
+<hr class="my-5">
+
+<!-- Answers Section -->
+<div class="answers-section">
+    <h3 class="mb-4">
+        @Model.Answers.Count @(Model.Answers.Count == 1 ? "Answer" : "Answers")
+    </h3>
+    
+    @foreach (var answer in Model.Answers)
+    {
+        <div class="row mb-4">
+            <div class="col-md-1 text-center">
+                <!-- Answer Voting -->
+                <div class="vote-section" data-answer-id="@answer.Id">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-outline-success btn-lg vote-btn" data-vote="up" data-type="answer">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="btn btn-outline-secondary btn-lg disabled">
+                            <i class="fas fa-chevron-up"></i>
+                        </div>
+                    }
+                    
+                    <div class="vote-count my-2 fs-4 fw-bold" id="answer-votes-@answer.Id">@answer.Votes</div>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-outline-danger btn-lg vote-btn" data-vote="down" data-type="answer">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="btn btn-outline-secondary btn-lg disabled">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    }
+                    
+                    @if (answer.IsAccepted)
+                    {
+                        <div class="mt-2">
+                            <i class="fas fa-check-circle fa-2x text-success" title="Accepted Answer"></i>
+                        </div>
+                    }
+                    else if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="btn btn-outline-success mt-2 accept-btn" data-answer-id="@answer.Id" title="Accept Answer">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-11">
+                <div class="card @(answer.IsAccepted ? "border-success" : "")">
+                    @if (answer.IsAccepted)
+                    {
+                        <div class="card-header bg-success text-white">
+                            <i class="fas fa-check-circle me-2"></i>Accepted Answer
+                        </div>
+                    }
+                    <div class="card-body">
+                        <div class="answer-content mb-3">
+                            <div class="formatted-content">
+                                @Html.Raw(answer.Content.Replace("\n", "<br>"))
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="answer-actions">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @* Comments temporarily disabled
+                                    <button class="btn btn-sm btn-outline-primary me-2" onclick="showCommentForm('answer', @answer.Id)">
+                                        <i class="fas fa-comment me-1"></i>Add Comment
+                                    </button>
+                                    *@
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-share me-1"></i>Share
+                                    </button>
+                                }
+                            </div>
+                            <div class="user-info text-end">
+                                <div class="bg-light p-3 rounded">
+                                    <small class="text-muted">answered by</small><br>
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        @if (!string.IsNullOrEmpty(answer.UserAvatar))
+                                        {
+                                            <img src="@answer.UserAvatar" alt="@answer.UserName" class="rounded-circle me-2" 
+                                                 width="32" height="32" onerror="this.style.display='none'">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                                                 style="width: 32px; height: 32px;">
+                                                <i class="fas fa-user text-white small"></i>
+                                            </div>
+                                        }
+                                        <div>
+                                            <div class="fw-bold">@answer.UserName</div>
+                                            <small class="text-muted">@answer.CreatedDate.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Answer Comments temporarily disabled -->
+                @*
+                <div class="comments-section mt-3" id="answer-comments-@answer.Id">
+                    @foreach (var comment in answer.Comments)
+                    {
+                        <div class="comment border-start border-3 border-light ps-3 py-2">
+                            <span class="comment-content">@comment.Content</span>
+                            <small class="text-muted ms-2">
+                                – <strong>@comment.UserName</strong> @comment.CreatedDate.ToString("MMM dd, yyyy 'at' HH:mm")
+                            </small>
+                        </div>
+                    }
+                    
+                    <!-- Comment Form -->
+                    <div class="comment-form mt-2" id="comment-form-answer-@answer.Id" style="display: none;">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Add a comment..." maxlength="500">
+                                <button class="btn btn-primary" type="button" onclick="submitComment('answer', @answer.Id, this)">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="hideCommentForm('answer', @answer.Id)">
+                                    Cancel
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+                *@
+            </div>
+        </div>
+        
+        @if (answer != Model.Answers.Last())
+        {
+            <hr>
+        }
+    }
+</div>
+
+<!-- Your Answer Section -->
+<hr class="my-5">
+<div class="your-answer-section">
+    <h4 class="mb-3"><i class="fas fa-edit me-2"></i>Your Answer</h4>
+    
+    <form asp-controller="Answers" asp-action="Create" method="post">
+        <input type="hidden" name="questionId" value="@Model.Id" />
+        
+        <div class="mb-3">
+            <textarea name="content" class="form-control" rows="6" 
+                      placeholder="Write your answer here... You can use Markdown formatting." required></textarea>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">
+                <i class="fas fa-markdown me-1"></i>
+                You can use Markdown formatting
+            </small>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane me-2"></i>Post Your Answer
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/questions.js"></script>
+}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueryHub - Static Version</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --border-radius: 8px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0b5ed7 100%);
+            border-radius: var(--border-radius);
+        }
+        
+        .card {
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .question-card {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            background: #f8f9fa;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-number {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-question-circle me-2"></i>QueryHub
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="questions.html">
+                            <i class="fas fa-list me-1"></i>Questions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ask.html">
+                            <i class="fas fa-plus me-1"></i>Ask Question
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Search Form -->
+                <form class="d-flex me-3">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Search questions..." style="max-width: 250px;">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <!-- Hero Section -->
+        <div class="hero-section text-white p-5 rounded-4 mb-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-question-circle me-3"></i>Welcome to QueryHub
+                    </h1>
+                    <p class="lead mb-4">
+                        Your central hub for asking and answering queries. Get help from the community and share your knowledge!
+                    </p>
+                    <a href="login.html" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                    </a>
+                    <a href="questions.html" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Browse Questions
+                    </a>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-users fa-8x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-question-circle fa-3x text-primary mb-3"></i>
+                        <h4 class="fw-bold">25+</h4>
+                        <p class="text-muted mb-0">Questions Asked</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-comments fa-3x text-success mb-3"></i>
+                        <h4 class="fw-bold">150+</h4>
+                        <p class="text-muted mb-0">Answers Given</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-info mb-3"></i>
+                        <h4 class="fw-bold">50+</h4>
+                        <p class="text-muted mb-0">Active Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-tags fa-3x text-warning mb-3"></i>
+                        <h4 class="fw-bold">8+</h4>
+                        <p class="text-muted mb-0">Popular Tags</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Questions -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3><i class="fas fa-clock me-2"></i>Recent Questions</h3>
+                    <a href="questions.html" class="btn btn-outline-primary">
+                        View All <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Sample Questions -->
+                <div class="card mb-3 shadow-sm question-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h5 class="card-title">
+                                    <a href="question-detail.html" class="text-decoration-none">How to implement async/await in C#?</a>
+                                </h5>
+                                <p class="card-text text-muted">I'm having trouble understanding how to properly use async/await in my C# application...</p>
+                                
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary me-1">C#</span>
+                                    <span class="badge bg-secondary me-1">async</span>
+                                    <span class="badge bg-secondary me-1">await</span>
+                                </div>
+                                
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>John Doe •
+                                    <i class="fas fa-clock me-1"></i>2 hours ago
+                                </small>
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <div class="d-flex flex-column align-items-end">
+                                    <span class="badge bg-primary mb-1">
+                                        <i class="fas fa-thumbs-up me-1"></i>8
+                                    </span>
+                                    <span class="badge bg-success mb-1">
+                                        <i class="fas fa-comments me-1"></i>3
+                                    </span>
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-eye me-1"></i>45
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 shadow-sm question-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h5 class="card-title">
+                                    <a href="question-detail.html" class="text-decoration-none">Best practices for ASP.NET Core MVC?</a>
+                                </h5>
+                                <p class="card-text text-muted">What are the current best practices for developing ASP.NET Core MVC applications?</p>
+                                
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary me-1">ASP.NET</span>
+                                    <span class="badge bg-secondary me-1">MVC</span>
+                                    <span class="badge bg-secondary me-1">best-practices</span>
+                                </div>
+                                
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>Jane Smith •
+                                    <i class="fas fa-clock me-1"></i>5 hours ago
+                                </small>
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <div class="d-flex flex-column align-items-end">
+                                    <span class="badge bg-primary mb-1">
+                                        <i class="fas fa-thumbs-up me-1"></i>12
+                                    </span>
+                                    <span class="badge bg-success mb-1">
+                                        <i class="fas fa-comments me-1"></i>5
+                                    </span>
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-eye me-1"></i>78
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Popular Tags</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">C#</a>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">ASP.NET</a>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">JavaScript</a>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">SQL</a>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">HTML</a>
+                        <a href="#" class="badge bg-light text-dark text-decoration-none me-2 mb-2 p-2 border">CSS</a>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Join Our Community</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Login to ask questions, provide answers, and engage with the community!</p>
+                        <a href="login.html" class="btn btn-info w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-question-circle me-2"></i>QueryHub</h5>
+                    <p class="text-muted">Your central hub for asking and answering queries.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">&copy; 2025 QueryHub. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+        // Simple interactivity
+        $(document).ready(function() {
+            $('.card').hover(
+                function() { $(this).addClass('shadow-lg'); },
+                function() { $(this).removeClass('shadow-lg'); }
+            );
+            
+            // Demo alert for buttons
+            $('a[href="login.html"], a[href="ask.html"]').click(function(e) {
+                e.preventDefault();
+                alert('This is a static demo. For full functionality, use the ASP.NET Core version!');
+            });
+        });
+    </script>
+</body>
+</html>

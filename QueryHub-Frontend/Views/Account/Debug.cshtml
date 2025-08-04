@@ -1,0 +1,185 @@
+@{
+    ViewData["Title"] = "Authentication Debug";
+}
+
+<div class="container mt-4">
+    <h2>Authentication Debug Page</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Quick Register Test</h4>
+            <form id="quickRegister">
+                <div class="mb-3">
+                    <label>Username:</label>
+                    <input type="text" class="form-control" id="regUsername" value="testuser123" />
+                </div>
+                <div class="mb-3">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" id="regEmail" value="test@example.com" />
+                </div>
+                <div class="mb-3">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" id="regPassword" value="password123" />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="testRegister()">Test Register</button>
+            </form>
+        </div>
+        
+        <div class="col-md-6">
+            <h4>Quick Login Test</h4>
+            <form id="quickLogin">
+                <div class="mb-3">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" id="loginEmail" value="test@example.com" />
+                </div>
+                <div class="mb-3">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" id="loginPassword" value="password123" />
+                </div>
+                <button type="button" class="btn btn-success" onclick="testLogin()">Test Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4>API Test Results:</h4>
+            <div id="testResults" class="alert alert-info">
+                Click the buttons above to test authentication...
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h4>Test Question Creation</h4>
+            <form id="quickQuestion">
+                <div class="mb-3">
+                    <label>Title:</label>
+                    <input type="text" class="form-control" id="questionTitle" value="Debug Test Question" />
+                </div>
+                <div class="mb-3">
+                    <label>Body:</label>
+                    <textarea class="form-control" id="questionBody">This is a debug test question to verify functionality.</textarea>
+                </div>
+                <div class="mb-3">
+                    <label>Tags (comma-separated):</label>
+                    <input type="text" class="form-control" id="questionTags" value="debug,test" />
+                </div>
+                <button type="button" class="btn btn-warning" onclick="testQuestion()">Test Question</button>
+            </form>
+        </div>
+        
+        <div class="col-md-6">
+            <h4>Current User Info</h4>
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Authenticated:</strong> @User.Identity.IsAuthenticated</p>
+                    <p><strong>Name:</strong> @(User.Identity.Name ?? "Not logged in")</p>
+                    <p><strong>Email:</strong> @(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "No email")</p>
+                    <p><strong>User ID:</strong> @(User.FindFirst("UserId")?.Value ?? "No user ID")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function testRegister() {
+    const username = document.getElementById('regUsername').value;
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    
+    try {
+        const response = await fetch('http://localhost:5031/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Username: username,
+                Email: email,
+                Password: password
+            })
+        });
+        
+        const result = await response.text();
+        const status = response.status;
+        
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Register Response (${status}):</strong><br><pre>${result}</pre>`;
+        document.getElementById('testResults').className = 
+            status === 200 ? 'alert alert-success' : 'alert alert-danger';
+            
+    } catch (error) {
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Register Error:</strong><br>${error.message}`;
+        document.getElementById('testResults').className = 'alert alert-danger';
+    }
+}
+
+async function testLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+        const response = await fetch('http://localhost:5031/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Email: email,
+                Password: password
+            })
+        });
+        
+        const result = await response.text();
+        const status = response.status;
+        
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Login Response (${status}):</strong><br><pre>${result}</pre>`;
+        document.getElementById('testResults').className = 
+            status === 200 ? 'alert alert-success' : 'alert alert-danger';
+            
+    } catch (error) {
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Login Error:</strong><br>${error.message}`;
+        document.getElementById('testResults').className = 'alert alert-danger';
+    }
+}
+
+async function testQuestion() {
+    const title = document.getElementById('questionTitle').value;
+    const body = document.getElementById('questionBody').value;
+    const tagsStr = document.getElementById('questionTags').value;
+    const tags = tagsStr.split(',').map(t => t.trim());
+    
+    try {
+        const response = await fetch('http://localhost:5031/api/Questions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Title: title,
+                Body: body,
+                Tags: tags
+            })
+        });
+        
+        const result = await response.text();
+        const status = response.status;
+        
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Question Response (${status}):</strong><br><pre>${result}</pre>`;
+        document.getElementById('testResults').className = 
+            status === 201 ? 'alert alert-success' : 'alert alert-danger';
+            
+    } catch (error) {
+        document.getElementById('testResults').innerHTML = 
+            `<strong>Question Error:</strong><br>${error.message}`;
+        document.getElementById('testResults').className = 'alert alert-danger';
+    }
+}
+</script>
