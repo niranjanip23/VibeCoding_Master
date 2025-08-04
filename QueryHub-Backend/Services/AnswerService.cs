@@ -106,12 +106,16 @@ namespace QueryHub_Backend.Services
             // Award reputation to the user for answering
             await _userRepository.UpdateReputationAsync(userId, 1);
 
+            // Get the user information to populate the username
+            var user = await _userRepository.GetByIdAsync(userId);
+
             return new AnswerDto
             {
                 Id = createdAnswer.Id,
                 Body = createdAnswer.Body,
                 QuestionId = createdAnswer.QuestionId,
                 UserId = createdAnswer.UserId,
+                Username = user?.Username ?? "Unknown User",
                 CreatedAt = createdAnswer.CreatedAt,
                 UpdatedAt = createdAnswer.UpdatedAt,
                 Votes = createdAnswer.VoteCount,
@@ -137,12 +141,16 @@ namespace QueryHub_Backend.Services
 
             var updatedAnswer = await _answerRepository.UpdateAsync(answer);
 
+            // Get the user information to populate the username
+            var user = await _userRepository.GetByIdAsync(userId);
+
             return new AnswerDto
             {
                 Id = updatedAnswer.Id,
                 Body = updatedAnswer.Body,
                 QuestionId = updatedAnswer.QuestionId,
                 UserId = updatedAnswer.UserId,
+                Username = user?.Username ?? "Unknown User",
                 CreatedAt = updatedAnswer.CreatedAt,
                 UpdatedAt = updatedAnswer.UpdatedAt,
                 Votes = updatedAnswer.VoteCount,

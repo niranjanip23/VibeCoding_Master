@@ -37,8 +37,28 @@ namespace QueryHub_Frontend.Controllers
                     return RedirectToAction("Details", "Questions", new { id = questionId });
                 }
 
-                // Call the API to create the answer (allow anonymous posting)
-                var answer = await _apiService.CreateAnswerAsync(questionId, content);
+                // Check if user is authenticated and get token
+                AnswerViewModel? answer = null;
+                if (User.Identity?.IsAuthenticated == true)
+                {
+                    var token = User.FindFirst("Token")?.Value;
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        // Call the authenticated API to create the answer
+                        answer = await _apiService.CreateAnswerAsync(questionId, content, token);
+                    }
+                    else
+                    {
+                        // User is authenticated but token is missing - redirect to login
+                        TempData["ErrorMessage"] = "Authentication token not found. Please log in again.";
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
+                else
+                {
+                    // Call the anonymous API to create the answer
+                    answer = await _apiService.CreateAnswerAsync(questionId, content);
+                }
                 
                 if (answer != null)
                 {
