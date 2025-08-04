@@ -45,8 +45,19 @@ namespace QueryHub_Frontend.Models
         public string SelectedTag { get; set; } = string.Empty;
         public List<string> PopularTags { get; set; } = new List<string>();
         public int TotalQuestions { get; set; }
+        public int TotalAnswers { get; set; }
+        public int ActiveUsers { get; set; }
+        public int TotalTags { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public int TotalPages => (int)Math.Ceiling((double)TotalQuestions / PageSize);
+    }
+
+    public class DashboardStatistics
+    {
+        public int TotalQuestions { get; set; }
+        public int TotalAnswers { get; set; }
+        public int ActiveUsers { get; set; }
+        public int TotalTags { get; set; }
     }
 }

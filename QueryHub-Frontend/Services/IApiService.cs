@@ -14,6 +14,7 @@ namespace QueryHub_Frontend.Services
         Task<bool> VoteAsync(int questionId, int? answerId, bool isUpvote, string token);
         Task<int?> GetQuestionVoteCountAsync(int questionId, string token);
         Task<int?> GetAnswerVoteCountAsync(int answerId, string token);
+        Task<DashboardStatistics?> GetDashboardStatisticsAsync();
     }
 
     public class AuthResult

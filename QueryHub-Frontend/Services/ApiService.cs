@@ -417,6 +417,30 @@ namespace QueryHub_Frontend.Services
             }
         }
 
+        public async Task<DashboardStatistics?> GetDashboardStatisticsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/statistics/dashboard");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var statistics = JsonSerializer.Deserialize<DashboardStatistics>(json, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                    return statistics;
+                }
+                
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         // Helper mapping methods
         private QuestionViewModel MapToQuestionViewModel(QuestionApiModel apiModel)
         {
@@ -522,5 +546,13 @@ namespace QueryHub_Frontend.Services
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
+    }
+
+    public class DashboardStatistics
+    {
+        public int TotalQuestions { get; set; }
+        public int TotalAnswers { get; set; }
+        public int TotalUsers { get; set; }
+        public int TotalTags { get; set; }
     }
 }

@@ -22,12 +22,24 @@ namespace QueryHub_Frontend.Controllers
             {
                 var questions = await _apiService.GetQuestionsAsync("", "", 1, 5);
                 var tags = await _apiService.GetTagsAsync();
-
+                
+                // Get all questions to calculate real statistics
+                var allQuestions = await _apiService.GetQuestionsAsync("", "", 1, 1000); // Large page size to get all questions
+                
+                // Calculate total answers from all questions
+                int totalAnswers = allQuestions.Sum(q => q.AnswerCount);
+                
+                // Get unique users count (approximation based on questions - could be improved)
+                var uniqueUsers = allQuestions.Select(q => q.UserName).Distinct().Count();
+                
                 var model = new QuestionListViewModel
                 {
                     Questions = questions,
                     PopularTags = tags.Take(6).ToList(),
-                    TotalQuestions = questions.Count
+                    TotalQuestions = allQuestions.Count,
+                    TotalAnswers = totalAnswers,
+                    ActiveUsers = uniqueUsers,
+                    TotalTags = tags.Count
                 };
 
                 return View(model);
@@ -41,7 +53,10 @@ namespace QueryHub_Frontend.Controllers
                 {
                     Questions = new List<QuestionViewModel>(),
                     PopularTags = new List<string>(),
-                    TotalQuestions = 0
+                    TotalQuestions = 0,
+                    TotalAnswers = 0,
+                    ActiveUsers = 0,
+                    TotalTags = 0
                 };
                 
                 TempData["ErrorMessage"] = "Error loading data. Please try again.";
