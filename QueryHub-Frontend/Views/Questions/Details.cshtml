@@ -318,26 +318,61 @@
 <!-- Your Answer Section -->
 <hr class="my-5">
 <div class="your-answer-section">
-    <h4 class="mb-3"><i class="fas fa-edit me-2"></i>Your Answer</h4>
-    
-    <form asp-controller="Answers" asp-action="Create" method="post">
-        <input type="hidden" name="questionId" value="@Model.Id" />
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <h4 class="mb-3"><i class="fas fa-edit me-2"></i>Your Answer</h4>
         
-        <div class="mb-3">
-            <textarea name="content" class="form-control" rows="6" 
-                      placeholder="Write your answer here... You can use Markdown formatting." required></textarea>
+        <form asp-controller="Answers" asp-action="Create" method="post">
+            <input type="hidden" name="questionId" value="@Model.Id" />
+            
+            <div class="mb-3">
+                <textarea name="content" class="form-control" rows="6" 
+                          placeholder="Write your answer here... You can use Markdown formatting." required></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    <i class="fas fa-markdown me-1"></i>
+                    You can use Markdown formatting
+                </small>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i>Post Your Answer
+                </button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <!-- Login to Answer Section -->
+        <div class="text-center py-5">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <i class="fas fa-lock fa-3x text-primary mb-3"></i>
+                    <h4 class="card-title">Want to Answer This Question?</h4>
+                    <p class="card-text text-muted mb-4">
+                        Join our community to share your knowledge and help others! 
+                        You need to be logged in to post an answer.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-controller="Account" asp-action="Login" 
+                           asp-route-returnUrl="@Url.Action("Details", "Questions", new { id = Model.Id })" 
+                           class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login to Answer
+                        </a>
+                        <span class="text-muted align-self-center">or</span>
+                        <a asp-controller="Account" asp-action="Register" 
+                           asp-route-returnUrl="@Url.Action("Details", "Questions", new { id = Model.Id })" 
+                           class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </a>
+                    </div>
+                    <small class="text-muted mt-3 d-block">
+                        Already have an account? Click "Login to Answer" above.
+                    </small>
+                </div>
+            </div>
         </div>
-        
-        <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted">
-                <i class="fas fa-markdown me-1"></i>
-                You can use Markdown formatting
-            </small>
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane me-2"></i>Post Your Answer
-            </button>
-        </div>
-    </form>
+    }
 </div>
 
 @section Scripts {

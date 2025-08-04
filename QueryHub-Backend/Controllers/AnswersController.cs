@@ -77,6 +77,7 @@ namespace QueryHub_Backend.Controllers
         /// Create a new answer
         /// </summary>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateAnswerDto createAnswerDto)
         {
             try
@@ -87,10 +88,9 @@ namespace QueryHub_Backend.Controllers
                 }
 
                 var userId = GetUserIdFromClaims();
-                // If no user is authenticated, use a default user ID (1) for anonymous posting
                 if (!userId.HasValue)
                 {
-                    userId = 1; // Default user for anonymous answers
+                    return Unauthorized(new { message = "User ID not found in token. Please log in to post an answer." });
                 }
 
                 var answer = await _answerService.CreateAsync(createAnswerDto, userId.Value);

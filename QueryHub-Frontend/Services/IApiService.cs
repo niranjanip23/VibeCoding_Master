@@ -11,7 +11,6 @@ namespace QueryHub_Frontend.Services
         Task<List<string>> GetTagsAsync();
         Task<QuestionViewModel?> CreateQuestionAsync(string title, string description, List<string> tags, string token);
         Task<AnswerViewModel?> CreateAnswerAsync(int questionId, string content, string token);
-        Task<AnswerViewModel?> CreateAnswerAsync(int questionId, string content); // Anonymous version
         Task<bool> VoteAsync(int questionId, int? answerId, bool isUpvote, string token);
     }
 

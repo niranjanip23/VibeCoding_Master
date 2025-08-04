@@ -20,6 +20,7 @@ namespace QueryHub_Frontend.Controllers
         // POST: Answers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(int questionId, string content)
         {
             try
@@ -37,28 +38,17 @@ namespace QueryHub_Frontend.Controllers
                     return RedirectToAction("Details", "Questions", new { id = questionId });
                 }
 
-                // Check if user is authenticated and get token
-                AnswerViewModel? answer = null;
-                if (User.Identity?.IsAuthenticated == true)
+                // User must be authenticated to reach this point due to [Authorize] attribute
+                var token = User.FindFirst("Token")?.Value;
+                if (string.IsNullOrEmpty(token))
                 {
-                    var token = User.FindFirst("Token")?.Value;
-                    if (!string.IsNullOrEmpty(token))
-                    {
-                        // Call the authenticated API to create the answer
-                        answer = await _apiService.CreateAnswerAsync(questionId, content, token);
-                    }
-                    else
-                    {
-                        // User is authenticated but token is missing - redirect to login
-                        TempData["ErrorMessage"] = "Authentication token not found. Please log in again.";
-                        return RedirectToAction("Login", "Account");
-                    }
+                    // User is authenticated but token is missing - redirect to login
+                    TempData["ErrorMessage"] = "Your session has expired. Please log in again to post an answer.";
+                    return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("Details", "Questions", new { id = questionId }) });
                 }
-                else
-                {
-                    // Call the anonymous API to create the answer
-                    answer = await _apiService.CreateAnswerAsync(questionId, content);
-                }
+
+                // Call the authenticated API to create the answer
+                var answer = await _apiService.CreateAnswerAsync(questionId, content, token);
                 
                 if (answer != null)
                 {
@@ -70,6 +60,12 @@ namespace QueryHub_Frontend.Controllers
                 }
 
                 return RedirectToAction("Details", "Questions", new { id = questionId });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Handle authentication errors specifically
+                TempData["ErrorMessage"] = "Your session has expired. Please log in again to post an answer.";
+                return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("Details", "Questions", new { id = questionId }) });
             }
             catch (Exception ex)
             {

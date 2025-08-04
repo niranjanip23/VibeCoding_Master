@@ -285,10 +285,20 @@ namespace QueryHub_Frontend.Services
 
                     return answer != null ? MapToAnswerViewModel(answer) : null;
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    // Throw a specific exception for authentication issues
+                    throw new UnauthorizedAccessException("Authentication required to post an answer.");
+                }
                 else
                 {
                     return null;
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Re-throw authentication exceptions
+                throw;
             }
             catch (Exception)
             {
@@ -297,37 +307,6 @@ namespace QueryHub_Frontend.Services
             finally
             {
                 _httpClient.DefaultRequestHeaders.Authorization = null;
-            }
-        }
-
-        public async Task<AnswerViewModel?> CreateAnswerAsync(int questionId, string content)
-        {
-            try
-            {
-                var createRequest = new { QuestionId = questionId, Body = content };
-                var json = JsonSerializer.Serialize(createRequest);
-                var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync("/api/answers", stringContent);
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var answer = JsonSerializer.Deserialize<AnswerApiModel>(responseContent, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    return answer != null ? MapToAnswerViewModel(answer) : null;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                return null;
             }
         }
 
