@@ -21,9 +21,9 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, UserId, QuestionId, AnswerId, VoteType, CreatedAt 
+                SELECT Id, UserId, TargetId as QuestionId, NULL as AnswerId, VoteType, CreatedAt 
                 FROM Votes 
-                WHERE UserId = @userId AND QuestionId = @questionId AND AnswerId IS NULL";
+                WHERE UserId = @userId AND TargetId = @questionId AND TargetType = 1";
             command.Parameters.Add(new SqliteParameter("@userId", userId));
             command.Parameters.Add(new SqliteParameter("@questionId", questionId));
 
@@ -43,9 +43,9 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, UserId, QuestionId, AnswerId, VoteType, CreatedAt 
+                SELECT Id, UserId, NULL as QuestionId, TargetId as AnswerId, VoteType, CreatedAt 
                 FROM Votes 
-                WHERE UserId = @userId AND AnswerId = @answerId";
+                WHERE UserId = @userId AND TargetId = @answerId AND TargetType = 2";
             command.Parameters.Add(new SqliteParameter("@userId", userId));
             command.Parameters.Add(new SqliteParameter("@answerId", answerId));
 
@@ -67,7 +67,10 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, UserId, QuestionId, AnswerId, VoteType, CreatedAt 
+                SELECT Id, UserId, 
+                       CASE WHEN TargetType = 1 THEN TargetId ELSE NULL END as QuestionId,
+                       CASE WHEN TargetType = 2 THEN TargetId ELSE NULL END as AnswerId,
+                       VoteType, CreatedAt 
                 FROM Votes 
                 WHERE UserId = @userId 
                 ORDER BY CreatedAt DESC";
@@ -88,14 +91,19 @@ namespace QueryHub_Backend.Repositories
             connection.Open();
 
             var command = connection.CreateCommand();
+            
+            // Determine TargetId and TargetType based on vote properties
+            int targetId = vote.QuestionId ?? vote.AnswerId ?? 0;
+            int targetType = vote.QuestionId.HasValue ? 1 : 2; // 1=Question, 2=Answer
+            
             command.CommandText = @"
-                INSERT INTO Votes (UserId, QuestionId, AnswerId, VoteType, CreatedAt)
-                VALUES (@userId, @questionId, @answerId, @voteType, @createdAt);
+                INSERT INTO Votes (UserId, TargetId, TargetType, VoteType, CreatedAt)
+                VALUES (@userId, @targetId, @targetType, @voteType, @createdAt);
                 SELECT last_insert_rowid();";
 
             command.Parameters.Add(new SqliteParameter("@userId", vote.UserId));
-            command.Parameters.Add(new SqliteParameter("@questionId", vote.QuestionId));
-            command.Parameters.Add(new SqliteParameter("@answerId", (object?)vote.AnswerId ?? DBNull.Value));
+            command.Parameters.Add(new SqliteParameter("@targetId", targetId));
+            command.Parameters.Add(new SqliteParameter("@targetType", targetType));
             command.Parameters.Add(new SqliteParameter("@voteType", (int)vote.VoteType));
             command.Parameters.Add(new SqliteParameter("@createdAt", vote.CreatedAt));
 
@@ -142,9 +150,9 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT COALESCE(SUM(CASE WHEN VoteType = 1 THEN 1 WHEN VoteType = 2 THEN -1 ELSE 0 END), 0) as VoteCount
+                SELECT COALESCE(SUM(CASE WHEN VoteType = 1 THEN 1 WHEN VoteType = -1 THEN -1 ELSE 0 END), 0) as VoteCount
                 FROM Votes 
-                WHERE QuestionId = @questionId AND AnswerId IS NULL";
+                WHERE TargetId = @questionId AND TargetType = 1";
             command.Parameters.Add(new SqliteParameter("@questionId", questionId));
 
             var result = await command.ExecuteScalarAsync();
@@ -158,9 +166,9 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT COALESCE(SUM(CASE WHEN VoteType = 1 THEN 1 WHEN VoteType = 2 THEN -1 ELSE 0 END), 0) as VoteCount
+                SELECT COALESCE(SUM(CASE WHEN VoteType = 1 THEN 1 WHEN VoteType = -1 THEN -1 ELSE 0 END), 0) as VoteCount
                 FROM Votes 
-                WHERE AnswerId = @answerId";
+                WHERE TargetId = @answerId AND TargetType = 2";
             command.Parameters.Add(new SqliteParameter("@answerId", answerId));
 
             var result = await command.ExecuteScalarAsync();

@@ -191,7 +191,9 @@ namespace QueryHub_Frontend.Controllers
                 
                 if (success)
                 {
-                    return Json(new { success = true });
+                    // Get updated vote count
+                    var voteCount = await _apiService.GetQuestionVoteCountAsync(id, token);
+                    return Json(new { success = true, votes = voteCount ?? 0 });
                 }
                 else
                 {

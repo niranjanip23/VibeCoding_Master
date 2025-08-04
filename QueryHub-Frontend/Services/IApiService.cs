@@ -12,6 +12,8 @@ namespace QueryHub_Frontend.Services
         Task<QuestionViewModel?> CreateQuestionAsync(string title, string description, List<string> tags, string token);
         Task<AnswerViewModel?> CreateAnswerAsync(int questionId, string content, string token);
         Task<bool> VoteAsync(int questionId, int? answerId, bool isUpvote, string token);
+        Task<int?> GetQuestionVoteCountAsync(int questionId, string token);
+        Task<int?> GetAnswerVoteCountAsync(int answerId, string token);
     }
 
     public class AuthResult

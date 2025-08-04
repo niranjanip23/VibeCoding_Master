@@ -316,17 +316,100 @@ namespace QueryHub_Frontend.Services
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                var voteRequest = new { QuestionId = questionId, AnswerId = answerId, IsUpvote = isUpvote };
+                string endpoint;
+                object voteRequest;
+                
+                if (answerId.HasValue)
+                {
+                    // Vote on answer
+                    endpoint = "/api/votes/answer";
+                    voteRequest = new { 
+                        AnswerId = answerId.Value, 
+                        VoteType = isUpvote ? 1 : -1  // 1 = Upvote, -1 = Downvote 
+                    };
+                }
+                else
+                {
+                    // Vote on question
+                    endpoint = "/api/votes/question";
+                    voteRequest = new { 
+                        QuestionId = questionId, 
+                        VoteType = isUpvote ? 1 : -1  // 1 = Upvote, -1 = Downvote
+                    };
+                }
+
                 var json = JsonSerializer.Serialize(voteRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync("/api/votes", content);
+                var response = await _httpClient.PostAsync(endpoint, content);
 
                 return response.IsSuccessStatusCode;
             }
             catch (Exception)
             {
                 return false;
+            }
+            finally
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+            }
+        }
+
+        public async Task<int?> GetQuestionVoteCountAsync(int questionId, string token)
+        {
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.GetAsync($"/api/votes/question/{questionId}/count");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<JsonElement>(json);
+                    
+                    if (result.TryGetProperty("voteCount", out var voteCountElement))
+                    {
+                        return voteCountElement.GetInt32();
+                    }
+                }
+                
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            finally
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+            }
+        }
+
+        public async Task<int?> GetAnswerVoteCountAsync(int answerId, string token)
+        {
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.GetAsync($"/api/votes/answer/{answerId}/count");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<JsonElement>(json);
+                    
+                    if (result.TryGetProperty("voteCount", out var voteCountElement))
+                    {
+                        return voteCountElement.GetInt32();
+                    }
+                }
+                
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
             }
             finally
             {

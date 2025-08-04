@@ -78,13 +78,36 @@ namespace QueryHub_Frontend.Controllers
         // POST: Answers/Vote
         [HttpPost]
         [Authorize]
-        public IActionResult Vote(int id, bool isUpvote)
+        public async Task<IActionResult> Vote(int id, bool isUpvote)
         {
-            // In real app, update database
-            var currentVotes = new Random().Next(1, 15);
-            var newVotes = isUpvote ? currentVotes + 1 : Math.Max(0, currentVotes - 1);
-            
-            return Json(new { success = true, votes = newVotes });
+            try
+            {
+                var token = User.FindFirst("Token")?.Value;
+                if (string.IsNullOrEmpty(token))
+                {
+                    return Json(new { success = false, message = "Authentication required" });
+                }
+
+                // For answer voting, we need to get the questionId first, but we'll use the answerId
+                // The API service will handle this correctly
+                var success = await _apiService.VoteAsync(0, id, isUpvote, token); // questionId=0, answerId=id
+                
+                if (success)
+                {
+                    // Get updated vote count for the answer
+                    var voteCount = await _apiService.GetAnswerVoteCountAsync(id, token);
+                    return Json(new { success = true, votes = voteCount ?? 0 });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to record vote" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error voting on answer {AnswerId}", id);
+                return Json(new { success = false, message = "An error occurred while voting" });
+            }
         }
 
         // POST: Answers/Accept
