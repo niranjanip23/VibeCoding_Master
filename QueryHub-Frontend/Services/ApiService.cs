@@ -367,7 +367,7 @@ namespace QueryHub_Frontend.Services
                 Author = $"User {apiModel.UserId}", // We don't have username from backend, so use generic name
                 CreatedAt = apiModel.CreatedAt,
                 Votes = apiModel.Votes,
-                Answers = 0, // This will need to be fetched separately or added to backend response
+                Answers = apiModel.Answers?.Count ?? 0, // Count the actual answers from backend
                 Views = apiModel.Views
             };
         }
@@ -426,6 +426,7 @@ namespace QueryHub_Frontend.Services
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
+        public List<AnswerApiModel>? Answers { get; set; } = new List<AnswerApiModel>();
     }
 
     public class QuestionDetailApiModel

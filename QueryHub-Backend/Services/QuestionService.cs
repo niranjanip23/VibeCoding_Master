@@ -56,6 +56,8 @@ namespace QueryHub_Backend.Services
             foreach (var question in questions)
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
+                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                
                 questionDtos.Add(new QuestionDto
                 {
                     Id = question.Id,
@@ -66,7 +68,8 @@ namespace QueryHub_Backend.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList()
+                    Tags = tags.Select(t => t.Name).ToList(),
+                    Answers = answers.ToList()
                 });
             }
 
@@ -81,6 +84,8 @@ namespace QueryHub_Backend.Services
             foreach (var question in questions)
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
+                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                
                 questionDtos.Add(new QuestionDto
                 {
                     Id = question.Id,
@@ -91,7 +96,8 @@ namespace QueryHub_Backend.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList()
+                    Tags = tags.Select(t => t.Name).ToList(),
+                    Answers = answers.ToList()
                 });
             }
 
@@ -106,6 +112,8 @@ namespace QueryHub_Backend.Services
             foreach (var question in questions)
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
+                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                
                 questionDtos.Add(new QuestionDto
                 {
                     Id = question.Id,
@@ -116,7 +124,8 @@ namespace QueryHub_Backend.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList()
+                    Tags = tags.Select(t => t.Name).ToList(),
+                    Answers = answers.ToList()
                 });
             }
 
@@ -131,6 +140,8 @@ namespace QueryHub_Backend.Services
             foreach (var question in questions)
             {
                 var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
+                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+                
                 questionDtos.Add(new QuestionDto
                 {
                     Id = question.Id,
@@ -141,7 +152,8 @@ namespace QueryHub_Backend.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList()
+                    Tags = tags.Select(t => t.Name).ToList(),
+                    Answers = answers.ToList()
                 });
             }
 
