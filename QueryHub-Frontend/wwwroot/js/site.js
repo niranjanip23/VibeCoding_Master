@@ -182,9 +182,11 @@ function acceptAnswer(answerId) {
                     card.insertBefore(header, cardBody);
                 }
                 
-                showToast('Answer accepted!', 'success');
+                // Show the message from the server
+                showToast(response.message || 'Answer accepted!', 'success');
             } else {
-                showToast('Failed to accept answer', 'error');
+                // Show the specific error message from the server
+                showToast(response.message || 'Failed to accept answer', 'error');
             }
         },
         error: function() {

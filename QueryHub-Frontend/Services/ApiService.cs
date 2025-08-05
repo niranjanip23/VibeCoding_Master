@@ -463,6 +463,27 @@ namespace QueryHub_Frontend.Services
             }
         }
 
+        public async Task<bool> AcceptAnswerAsync(int answerId, string token)
+        {
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.PostAsync($"/api/answers/{answerId}/accept", null);
+                
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error accepting answer {AnswerId}", answerId);
+                return false;
+            }
+            finally
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+            }
+        }
+
         public async Task<DashboardStatistics?> GetDashboardStatisticsAsync()
         {
             try

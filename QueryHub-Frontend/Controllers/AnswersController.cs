@@ -113,10 +113,32 @@ namespace QueryHub_Frontend.Controllers
         // POST: Answers/Accept
         [HttpPost]
         [Authorize]
-        public IActionResult Accept(int id)
+        public async Task<IActionResult> Accept(int id)
         {
-            // In real app, update database and check if user owns the question
-            return Json(new { success = true, message = "Answer accepted!" });
+            try
+            {
+                var token = User.FindFirst("Token")?.Value;
+                if (string.IsNullOrEmpty(token))
+                {
+                    return Json(new { success = false, message = "Authentication required" });
+                }
+
+                var success = await _apiService.AcceptAnswerAsync(id, token);
+                
+                if (success)
+                {
+                    return Json(new { success = true, message = "Answer accepted! The author will receive bonus points." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to accept answer. You can only accept answers to your own questions." });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error accepting answer {AnswerId}", id);
+                return Json(new { success = false, message = "An error occurred while accepting the answer" });
+            }
         }
 
         // POST: Answers/AddComment
