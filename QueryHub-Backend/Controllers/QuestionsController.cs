@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QueryHub_Backend.DTOs;
 using QueryHub_Backend.Interfaces;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace QueryHub_Backend.Controllers
 {
@@ -11,10 +12,12 @@ namespace QueryHub_Backend.Controllers
     public class QuestionsController : ControllerBase
     {
         private readonly IQuestionService _questionService;
+        private readonly ILogger<QuestionsController> _logger;
 
-        public QuestionsController(IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService, ILogger<QuestionsController> logger)
         {
             _questionService = questionService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -56,7 +59,11 @@ namespace QueryHub_Backend.Controllers
         {
             try
             {
-                var question = await _questionService.GetByIdAsync(id);
+                // Get current user ID (if authenticated) to avoid incrementing view count for question author
+                var currentUserId = GetUserIdFromClaims();
+                _logger.LogInformation($"GetById - Question ID: {id}, Current User ID from claims: {currentUserId}");
+                
+                var question = await _questionService.GetByIdAsync(id, currentUserId);
                 if (question == null)
                 {
                     return NotFound(new { message = "Question not found" });
@@ -66,6 +73,7 @@ namespace QueryHub_Backend.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error retrieving question {id}");
                 return StatusCode(500, new { message = "An error occurred while retrieving the question", error = ex.Message });
             }
         }

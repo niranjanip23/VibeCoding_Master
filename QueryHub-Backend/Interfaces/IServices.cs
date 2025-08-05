@@ -14,7 +14,7 @@ namespace QueryHub_Backend.Interfaces
     
     public interface IQuestionService
     {
-        Task<QuestionDto?> GetByIdAsync(int id);
+        Task<QuestionDto?> GetByIdAsync(int id, int? currentUserId = null);
         Task<IEnumerable<QuestionDto>> GetAllAsync();
         Task<IEnumerable<QuestionDto>> GetByUserIdAsync(int userId);
         Task<IEnumerable<QuestionDto>> SearchAsync(string searchTerm);

@@ -200,7 +200,7 @@ namespace QueryHub_Backend.Repositories
             var command = connection.CreateCommand();
             command.CommandText = @"
                 UPDATE Questions 
-                SET Views = Views + 1 
+                SET ViewCount = ViewCount + 1 
                 WHERE Id = @questionId";
             command.Parameters.Add(new SqliteParameter("@questionId", questionId));
 

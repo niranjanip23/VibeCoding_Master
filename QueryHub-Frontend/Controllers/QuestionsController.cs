@@ -63,7 +63,11 @@ namespace QueryHub_Frontend.Controllers
         {
             try
             {
-                var question = await _apiService.GetQuestionAsync(id);
+                // Get the current user's token (if authenticated) to pass to the API
+                var token = User.FindFirst("Token")?.Value;
+                _logger.LogInformation($"Details for question {id} - User authenticated: {User.Identity?.IsAuthenticated}, Token exists: {!string.IsNullOrEmpty(token)}, Token length: {token?.Length ?? 0}");
+                
+                var question = await _apiService.GetQuestionAsync(id, token);
                 if (question == null)
                 {
                     _logger.LogWarning("Question with ID {QuestionId} not found", id);

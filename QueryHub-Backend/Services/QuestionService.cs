@@ -1,6 +1,7 @@
 using QueryHub_Backend.DTOs;
 using QueryHub_Backend.Interfaces;
 using QueryHub_Backend.Models;
+using Microsoft.Extensions.Logging;
 
 namespace QueryHub_Backend.Services
 {
@@ -10,25 +11,43 @@ namespace QueryHub_Backend.Services
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAnswerService _answerService;
+        private readonly ILogger<QuestionService> _logger;
 
         public QuestionService(
             IQuestionRepository questionRepository,
             ITagRepository tagRepository,
             IUserRepository userRepository,
-            IAnswerService answerService)
+            IAnswerService answerService,
+            ILogger<QuestionService> logger)
         {
             _questionRepository = questionRepository;
             _tagRepository = tagRepository;
             _userRepository = userRepository;
             _answerService = answerService;
+            _logger = logger;
         }
 
-        public async Task<QuestionDto?> GetByIdAsync(int id)
+        public async Task<QuestionDto?> GetByIdAsync(int id, int? currentUserId = null)
         {
             var question = await _questionRepository.GetByIdAsync(id);
             if (question == null) return null;
 
-            await _questionRepository.IncrementViewsAsync(id);
+            _logger.LogInformation($"GetByIdAsync - Question ID: {id}, Question Author: {question.UserId}, Current User: {currentUserId}");
+
+            // Only increment view count if the current user is not the question author
+            if (currentUserId == null || currentUserId != question.UserId)
+            {
+                _logger.LogInformation($"Incrementing view count - Current user ({currentUserId}) is not the author ({question.UserId})");
+                await _questionRepository.IncrementViewsAsync(id);
+                
+                // Fetch the question again to get the updated view count
+                question = await _questionRepository.GetByIdAsync(id);
+                if (question == null) return null;
+            }
+            else
+            {
+                _logger.LogInformation($"NOT incrementing view count - Current user ({currentUserId}) is the author ({question.UserId})");
+            }
             
             var tags = await _tagRepository.GetByQuestionIdAsync(id);
             var answers = await _answerService.GetByQuestionIdAsync(id);
@@ -43,7 +62,7 @@ namespace QueryHub_Backend.Services
                 Username = user?.Username ?? "Unknown User",
                 CreatedAt = question.CreatedAt,
                 UpdatedAt = question.UpdatedAt,
-                Views = question.Views + 1, // Include the incremented view
+                Views = question.Views, // Now using the actual updated value from database
                 Votes = question.VoteCount,
                 Tags = tags.Select(t => t.Name).ToList(),
                 Answers = answers.ToList()

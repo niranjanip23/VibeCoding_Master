@@ -190,10 +190,21 @@ namespace QueryHub_Frontend.Services
             }
         }
 
-        public async Task<QuestionDetailViewModel?> GetQuestionAsync(int id)
+        public async Task<QuestionDetailViewModel?> GetQuestionAsync(int id, string? token = null)
         {
             try
             {
+                // Set authorization header if token is provided
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                }
+                else
+                {
+                    // Clear authorization header for anonymous access
+                    _httpClient.DefaultRequestHeaders.Authorization = null;
+                }
+
                 var response = await _httpClient.GetAsync($"/api/questions/{id}");
                 var responseContent = await response.Content.ReadAsStringAsync();
 
