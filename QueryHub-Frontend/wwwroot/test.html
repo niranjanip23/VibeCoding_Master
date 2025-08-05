@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QueryHub Testing Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin-bottom: 30px; padding: 20px; border: 1px solid #ccc; }
+        .result { margin: 10px 0; padding: 10px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>QueryHub Testing Page</h1>
+    
+    <div class="test-section">
+        <h2>Login Error Message Testing</h2>
+        <button onclick="testWrongEmail()">Test Wrong Email</button>
+        <button onclick="testWrongPassword()">Test Wrong Password</button>
+        <button onclick="testCorrectLogin()">Test Correct Login</button>
+        <div id="loginResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Profile Points Testing</h2>
+        <button onclick="testProfilePoints()">Test Profile Points Calculation</button>
+        <div id="profileResults"></div>
+    </div>
+
+    <script>
+        async function testWrongEmail() {
+            try {
+                const response = await fetch('https://localhost:5001/Account/Login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'Email=wrong@queryhub.com&Password=password123'
+                });
+                const text = await response.text();
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result error">Wrong Email Test: ${response.status} - Check browser for error message</div>`;
+            } catch (error) {
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result error">Wrong Email Test Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testWrongPassword() {
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'john@queryhub.com', password: 'wrongpassword' })
+                });
+                const result = await response.json();
+                const className = response.ok ? 'success' : 'error';
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result ${className}">Wrong Password: ${result.message || 'Success'}</div>`;
+            } catch (error) {
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result error">Wrong Password Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testCorrectLogin() {
+            try {
+                const response = await fetch('http://localhost:5031/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'john@queryhub.com', password: 'password123' })
+                });
+                const result = await response.json();
+                const className = response.ok ? 'success' : 'error';
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result ${className}">Correct Login: ${response.ok ? 'SUCCESS' : result.message}</div>`;
+            } catch (error) {
+                document.getElementById('loginResults').innerHTML += 
+                    `<div class="result error">Correct Login Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testProfilePoints() {
+            try {
+                // Get questions data
+                const questionsResponse = await fetch('http://localhost:5031/api/questions?includeAnswers=true&pageSize=100');
+                const questionsData = await questionsResponse.json();
+                
+                // Calculate points for johndoe
+                const johndoeQuestions = questionsData.value.filter(q => q.username === 'johndoe');
+                let johndoeAnswers = [];
+                questionsData.value.forEach(q => {
+                    if (q.answers) {
+                        q.answers.forEach(a => {
+                            if (a.username === 'johndoe') {
+                                johndoeAnswers.push(a);
+                            }
+                        });
+                    }
+                });
+                
+                const totalVotes = johndoeQuestions.reduce((sum, q) => sum + q.votes, 0);
+                const questionsCount = johndoeQuestions.length;
+                const answersCount = johndoeAnswers.length;
+                const calculatedPoints = Math.max(100, totalVotes * 10 + questionsCount * 5 + answersCount * 2);
+                
+                document.getElementById('profileResults').innerHTML = `
+                    <div class="result success">
+                        <strong>JohnDoe Profile Analysis:</strong><br>
+                        Questions Asked: ${questionsCount}<br>
+                        Answers Given: ${answersCount}<br>
+                        Total Votes: ${totalVotes}<br>
+                        <strong>Calculated Points: ${calculatedPoints}</strong><br>
+                        Formula: max(100, votes*10 + questions*5 + answers*2)
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('profileResults').innerHTML += 
+                    `<div class="result error">Profile Points Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -3,19 +3,39 @@
     ViewData["Title"] = "Profile";
 }
 
+<style>
+    .profile-container {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .avatar-container {
+        position: relative;
+        display: inline-block;
+    }
+    .avatar-fallback {
+        transition: none !important;
+    }
+</style>
+
+<div class="profile-container">
 <div class="row">
     <div class="col-md-4">
         <div class="card shadow-sm">
             <div class="card-body text-center">
-                <div class="mb-3">
+                <div class="mb-3 avatar-container">
                     @if (!string.IsNullOrEmpty(Model.Avatar))
                     {
                         <img src="@Model.Avatar" alt="Avatar" class="rounded-circle" width="100" height="100" 
-                             onerror="this.src='/images/default-avatar.png'">
+                             style="display: block;" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                        <div class="bg-primary rounded-circle avatar-fallback d-none align-items-center justify-content-center" 
+                             style="width: 100px; height: 100px;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
                     }
                     else
                     {
-                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" 
+                        <div class="bg-primary rounded-circle avatar-fallback d-inline-flex align-items-center justify-content-center" 
                              style="width: 100px; height: 100px;">
                             <i class="fas fa-user fa-3x text-white"></i>
                         </div>
@@ -47,36 +67,107 @@
                 <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Activity Overview</h5>
             </div>
             <div class="card-body">
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>@ViewBag.ErrorMessage Some data may not be fully up-to-date.
+                    </div>
+                }
                 <div class="row text-center">
                     <div class="col-md-3">
                         <div class="border rounded p-3">
                             <i class="fas fa-question-circle fa-2x text-primary mb-2"></i>
-                            <h4 class="mb-1">12</h4>
+                            <h4 class="mb-1">@(ViewBag.QuestionsAsked ?? 0)</h4>
                             <small class="text-muted">Questions Asked</small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="border rounded p-3">
                             <i class="fas fa-comments fa-2x text-success mb-2"></i>
-                            <h4 class="mb-1">28</h4>
+                            <h4 class="mb-1">@(ViewBag.AnswersGiven ?? 0)</h4>
                             <small class="text-muted">Answers Given</small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="border rounded p-3">
                             <i class="fas fa-thumbs-up fa-2x text-info mb-2"></i>
-                            <h4 class="mb-1">156</h4>
+                            <h4 class="mb-1">@(ViewBag.TotalVotes ?? 0)</h4>
                             <small class="text-muted">Total Votes</small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="border rounded p-3">
-                            <i class="fas fa-check-circle fa-2x text-warning mb-2"></i>
-                            <h4 class="mb-1">15</h4>
-                            <small class="text-muted">Accepted Answers</small>
+                            <i class="fas fa-eye fa-2x text-warning mb-2"></i>
+                            <h4 class="mb-1">@(ViewBag.TotalViews ?? 0)</h4>
+                            <small class="text-muted">Total Views</small>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Dynamic Points Breakdown -->
+        <div class="card shadow-sm mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Points Breakdown</h5>
+                <small class="text-muted">Real-time calculation based on your activity</small>
+            </div>
+            <div class="card-body">
+                @{
+                    var pointsBreakdown = ViewBag.PointsBreakdown;
+                }
+                @if (pointsBreakdown != null)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-question-circle text-primary me-2"></i>Questions Asked (@(ViewBag.QuestionsAsked ?? 0) × 10)</span>
+                                    <span class="badge bg-primary rounded-pill">@pointsBreakdown.QuestionsAsked pts</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-comments text-success me-2"></i>Answers Given (@(ViewBag.AnswersGiven ?? 0) × 15)</span>
+                                    <span class="badge bg-success rounded-pill">@pointsBreakdown.AnswersGiven pts</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-thumbs-up text-info me-2"></i>Question Votes (@(ViewBag.TotalVotes ?? 0) × 5)</span>
+                                    <span class="badge bg-info rounded-pill">@pointsBreakdown.QuestionVotes pts</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-heart text-danger me-2"></i>Answer Votes (@(ViewBag.TotalAnswerVotes ?? 0) × 10)</span>
+                                    <span class="badge bg-danger rounded-pill">@pointsBreakdown.AnswerVotes pts</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-check-circle text-warning me-2"></i>Accepted Answers (@(ViewBag.AcceptedAnswers ?? 0) × 25)</span>
+                                    <span class="badge bg-warning rounded-pill">@pointsBreakdown.AcceptedAnswers pts</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span><i class="fas fa-eye text-secondary me-2"></i>Views Received (@(ViewBag.TotalViews ?? 0) × 1)</span>
+                                    <span class="badge bg-secondary rounded-pill">@pointsBreakdown.ViewsReceived pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <h4 class="text-primary mb-0">
+                            <i class="fas fa-star me-2"></i>Total Points: <strong>@pointsBreakdown.Total</strong>
+                        </h4>
+                        <small class="text-muted">Updated in real-time based on your activity</small>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted">
+                        <i class="fas fa-calculator fa-3x mb-3"></i>
+                        <p>Start asking questions and giving answers to earn points!</p>
+                        <small>Points are calculated in real-time based on your community contributions.</small>
+                    </div>
+                }
             </div>
         </div>
         
@@ -86,27 +177,62 @@
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">
-                    <div class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">Asked a question</div>
-                            <small class="text-muted">"How to implement async/await in C#?"</small>
+                    @{
+                        var recentActivity = ViewBag.RecentActivity as List<dynamic> ?? new List<dynamic>();
+                    }
+                    @if (recentActivity.Any())
+                    {
+                        @foreach (var activity in recentActivity)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    @if (activity.Type == "question")
+                                    {
+                                        <div class="fw-bold">
+                                            <i class="fas fa-question-circle text-primary me-1"></i>Asked a question
+                                        </div>
+                                        <small class="text-muted">
+                                            <a asp-controller="Questions" asp-action="Details" asp-route-id="@activity.Id" 
+                                               class="text-decoration-none text-muted">
+                                                "@(activity.Title.Length > 50 ? activity.Title.Substring(0, 50) + "..." : activity.Title)"
+                                            </a>
+                                        </small>
+                                    }
+                                    else if (activity.Type == "answer")
+                                    {
+                                        <div class="fw-bold">
+                                            <i class="fas fa-comment text-success me-1"></i>Answered a question
+                                        </div>
+                                        <small class="text-muted">
+                                            <a asp-controller="Questions" asp-action="Details" asp-route-id="@activity.QuestionId" 
+                                               class="text-decoration-none text-muted">
+                                                "@(activity.Title.Length > 50 ? activity.Title.Substring(0, 50) + "..." : activity.Title)"
+                                            </a>
+                                        </small>
+                                    }
+                                </div>
+                                <small class="text-muted">
+                                    @{
+                                        var daysSince = (DateTime.Now - activity.CreatedDate).TotalDays;
+                                        var timeText = daysSince < 1 ? "Today" : 
+                                                      daysSince < 2 ? "Yesterday" : 
+                                                      $"{Math.Floor(daysSince)} days ago";
+                                    }
+                                    @timeText
+                                </small>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="list-group-item text-center py-4">
+                            <div class="text-muted">
+                                <i class="fas fa-inbox fa-2x mb-2"></i>
+                                <p class="mb-0">No recent activity found.</p>
+                                <small>Start by asking your first question!</small>
+                            </div>
                         </div>
-                        <small class="text-muted">2 hours ago</small>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">Answered a question</div>
-                            <small class="text-muted">"Best practices for ASP.NET Core MVC?"</small>
-                        </div>
-                        <small class="text-muted">1 day ago</small>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">Received upvote</div>
-                            <small class="text-muted">Your answer was upvoted</small>
-                        </div>
-                        <small class="text-muted">2 days ago</small>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -131,4 +257,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

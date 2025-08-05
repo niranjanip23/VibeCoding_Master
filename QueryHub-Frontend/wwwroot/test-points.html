@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QueryHub - Dynamic Points Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .result { background: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 3px; }
+        .btn { padding: 8px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>QueryHub Dynamic Points System Test</h1>
+    
+    <div class="test-section">
+        <h2>Test User Profiles</h2>
+        <p>Test the dynamic points calculation for different users:</p>
+        <button class="btn" onclick="testProfile('johndoe')">Test John Doe</button>
+        <button class="btn" onclick="testProfile('janesmith')">Test Jane Smith</button>
+        <button class="btn" onclick="testProfile('bobjohnson')">Test Bob Johnson</button>
+        <div id="profileResult" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Login with Dynamic Points</h2>
+        <p>Login and check profile page:</p>
+        <form id="loginForm">
+            <div style="margin: 10px 0;">
+                <label>Email:</label>
+                <input type="email" id="email" value="john@queryhub.com" style="margin-left: 10px; padding: 5px;">
+            </div>
+            <div style="margin: 10px 0;">
+                <label>Password:</label>
+                <input type="password" id="password" value="password123" style="margin-left: 10px; padding: 5px;">
+            </div>
+            <button type="button" class="btn" onclick="testLogin()">Test Login</button>
+        </form>
+        <div id="loginResult" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>API Test - Questions with Answers</h2>
+        <button class="btn" onclick="testQuestionsAPI()">Test Questions API</button>
+        <div id="apiResult" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Points Calculation Test</h2>
+        <p>Calculate points manually to verify formula:</p>
+        <div style="margin: 10px 0;">
+            <label>Questions Asked:</label>
+            <input type="number" id="questions" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 10 points</span>
+        </div>
+        <div style="margin: 10px 0;">
+            <label>Answers Given:</label>
+            <input type="number" id="answers" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 15 points</span>
+        </div>
+        <div style="margin: 10px 0;">
+            <label>Question Votes:</label>
+            <input type="number" id="qvotes" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 5 points</span>
+        </div>
+        <div style="margin: 10px 0;">
+            <label>Answer Votes:</label>
+            <input type="number" id="avotes" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 10 points</span>
+        </div>
+        <div style="margin: 10px 0;">
+            <label>Accepted Answers:</label>
+            <input type="number" id="accepted" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 25 points</span>
+        </div>
+        <div style="margin: 10px 0;">
+            <label>Total Views:</label>
+            <input type="number" id="views" value="0" style="margin-left: 10px; padding: 5px; width: 80px;">
+            <span> × 1 point</span>
+        </div>
+        <button type="button" class="btn" onclick="calculatePoints()">Calculate Total Points</button>
+        <div id="pointsResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        function testProfile(username) {
+            document.getElementById('profileResult').style.display = 'block';
+            document.getElementById('profileResult').innerHTML = '<div class="info">Loading profile for ' + username + '...</div>';
+            
+            // Open profile in new tab
+            window.open('/Account/TestProfile?username=' + username, '_blank');
+            
+            document.getElementById('profileResult').innerHTML = '<div class="success">Profile opened in new tab for user: ' + username + '</div>';
+        }
+        
+        function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            document.getElementById('loginResult').style.display = 'block';
+            document.getElementById('loginResult').innerHTML = '<div class="info">Testing login...</div>';
+            
+            // Test login via form submission
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Account/Login';
+            
+            const emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'Email';
+            emailInput.value = email;
+            form.appendChild(emailInput);
+            
+            const passwordInput = document.createElement('input');
+            passwordInput.type = 'hidden';
+            passwordInput.name = 'Password';
+            passwordInput.value = password;
+            form.appendChild(passwordInput);
+            
+            // Add anti-forgery token (simplified)
+            document.body.appendChild(form);
+            
+            document.getElementById('loginResult').innerHTML = '<div class="info">Login form submitted. Check the main page for login status.</div>';
+            
+            // Open login page in new tab
+            window.open('/Account/Login', '_blank');
+        }
+        
+        function testQuestionsAPI() {
+            document.getElementById('apiResult').style.display = 'block';
+            document.getElementById('apiResult').innerHTML = '<div class="info">Testing API...</div>';
+            
+            // Test the debug API endpoint
+            window.open('/Account/TestApiMethod', '_blank');
+            
+            document.getElementById('apiResult').innerHTML = '<div class="success">API test opened in new tab</div>';
+        }
+        
+        function calculatePoints() {
+            const questions = parseInt(document.getElementById('questions').value) || 0;
+            const answers = parseInt(document.getElementById('answers').value) || 0;
+            const qvotes = parseInt(document.getElementById('qvotes').value) || 0;
+            const avotes = parseInt(document.getElementById('avotes').value) || 0;
+            const accepted = parseInt(document.getElementById('accepted').value) || 0;
+            const views = parseInt(document.getElementById('views').value) || 0;
+            
+            const questionPoints = questions * 10;
+            const answerPoints = answers * 15;
+            const qvotePoints = qvotes * 5;
+            const avotePoints = avotes * 10;
+            const acceptedPoints = accepted * 25;
+            const viewPoints = views * 1;
+            
+            const total = questionPoints + answerPoints + qvotePoints + avotePoints + acceptedPoints + viewPoints;
+            
+            document.getElementById('pointsResult').style.display = 'block';
+            document.getElementById('pointsResult').innerHTML = `
+                <div class="success">
+                    <h4>Points Breakdown:</h4>
+                    <ul>
+                        <li>Questions Asked: ${questions} × 10 = ${questionPoints} points</li>
+                        <li>Answers Given: ${answers} × 15 = ${answerPoints} points</li>
+                        <li>Question Votes: ${qvotes} × 5 = ${qvotePoints} points</li>
+                        <li>Answer Votes: ${avotes} × 10 = ${avotePoints} points</li>
+                        <li>Accepted Answers: ${accepted} × 25 = ${acceptedPoints} points</li>
+                        <li>Total Views: ${views} × 1 = ${viewPoints} points</li>
+                    </ul>
+                    <h3>Total Points: ${total}</h3>
+                    <p><em>This is the same formula used in the dynamic points system!</em></p>
+                </div>
+            `;
+        }
+        
+        // Auto-calculate on input change
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', calculatePoints);
+        });
+        
+        // Initial calculation
+        calculatePoints();
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ namespace QueryHub_Frontend.Services
         Task<AuthResult> LoginAsync(string email, string password);
         Task<AuthResult> RegisterAsync(string name, string username, string email, string password, string department);
         Task<List<QuestionViewModel>> GetQuestionsAsync(string search = "", string tag = "", int page = 1, int pageSize = 10);
+        Task<List<QuestionApiModel>> GetQuestionsWithAnswersAsync(string search = "", string tag = "", int page = 1, int pageSize = 10);
         Task<QuestionDetailViewModel?> GetQuestionAsync(int id);
         Task<List<string>> GetTagsAsync();
         Task<QuestionViewModel?> CreateQuestionAsync(string title, string description, List<string> tags, string token);

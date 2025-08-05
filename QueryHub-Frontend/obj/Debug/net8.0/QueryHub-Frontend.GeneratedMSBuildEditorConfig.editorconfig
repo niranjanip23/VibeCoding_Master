@@ -9,75 +9,75 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = QueryHub_Frontend
 build_property.RootNamespace = QueryHub_Frontend
-build_property.ProjectDir = C:\Users\2317697\OneDrive - Cognizant\Desktop\CC\VibeCoding_Master-1\QueryHub-Frontend\
+build_property.ProjectDir = c:\Users\2317697\OneDrive - Cognizant\Desktop\CC\VibeCoding_Master-1\QueryHub-Frontend\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\2317697\OneDrive - Cognizant\Desktop\CC\VibeCoding_Master-1\QueryHub-Frontend
+build_property.MSBuildProjectDirectory = c:\Users\2317697\OneDrive - Cognizant\Desktop\CC\VibeCoding_Master-1\QueryHub-Frontend
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Debug.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Debug.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxEZWJ1Zy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Login.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Profile.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Register.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/SimpleTest.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/SimpleTest.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaW1wbGVUZXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/TestAnswer.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Account/TestAnswer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxUZXN0QW5zd2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Home/Index.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Home/Privacy.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Ask.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Ask.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXEFzay5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Details.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Index.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Questions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/Error.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/_Layout.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/_ValidationScriptsPartial.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/_ViewImports.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/_ViewStart.cshtml]
+[c:/Users/2317697/OneDrive - Cognizant/Desktop/CC/VibeCoding_Master-1/QueryHub-Frontend/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

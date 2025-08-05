@@ -155,6 +155,41 @@ namespace QueryHub_Frontend.Services
             }
         }
 
+        public async Task<List<QuestionApiModel>> GetQuestionsWithAnswersAsync(string search = "", string tag = "", int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var queryParams = new List<string>();
+                if (!string.IsNullOrEmpty(search)) queryParams.Add($"search={Uri.EscapeDataString(search)}");
+                if (!string.IsNullOrEmpty(tag)) queryParams.Add($"tag={Uri.EscapeDataString(tag)}");
+                queryParams.Add($"page={page}");
+                queryParams.Add($"pageSize={pageSize}");
+                queryParams.Add("includeAnswers=true"); // Request full answer details
+
+                var queryString = string.Join("&", queryParams);
+                var response = await _httpClient.GetAsync($"/api/questions?{queryString}");
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var questions = JsonSerializer.Deserialize<List<QuestionApiModel>>(responseContent, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    return questions ?? new List<QuestionApiModel>();
+                }
+                else
+                {
+                    return new List<QuestionApiModel>();
+                }
+            }
+            catch (Exception)
+            {
+                return new List<QuestionApiModel>();
+            }
+        }
+
         public async Task<QuestionDetailViewModel?> GetQuestionAsync(int id)
         {
             try
@@ -499,60 +534,5 @@ namespace QueryHub_Frontend.Services
     public class RegisterResponse
     {
         public string? Message { get; set; }
-    }
-
-    public class QuestionApiModel
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = "";
-        public string Body { get; set; } = "";
-        public int UserId { get; set; }
-        public string Username { get; set; } = "";
-        public int Views { get; set; }
-        public int Votes { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public List<string> Tags { get; set; } = new List<string>();
-        public List<AnswerApiModel>? Answers { get; set; } = new List<AnswerApiModel>();
-    }
-
-    public class QuestionDetailApiModel
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = "";
-        public string Body { get; set; } = "";
-        public int UserId { get; set; }
-        public string Username { get; set; } = "";
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public int Votes { get; set; }
-        public int Views { get; set; }
-        public List<string> Tags { get; set; } = new List<string>();
-        public List<AnswerApiModel>? Answers { get; set; }
-    }
-
-    public class AnswerApiModel
-    {
-        public int Id { get; set; }
-        public string Body { get; set; } = "";
-        public string Username { get; set; } = "";
-        public DateTime CreatedAt { get; set; }
-        public int VoteCount { get; set; }
-        public int QuestionId { get; set; }
-    }
-
-    public class TagApiModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = "";
-        public string Description { get; set; } = "";
-    }
-
-    public class DashboardStatistics
-    {
-        public int TotalQuestions { get; set; }
-        public int TotalAnswers { get; set; }
-        public int TotalUsers { get; set; }
-        public int TotalTags { get; set; }
     }
 }

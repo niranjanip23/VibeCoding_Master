@@ -80,13 +80,13 @@ namespace QueryHub_Backend.Services
                 if (user == null)
                 {
                     Console.WriteLine($"Login failed: No user found with email {loginDto.Email}");
-                    throw new UnauthorizedAccessException("Invalid email or password");
+                    throw new UnauthorizedAccessException("Incorrect email address");
                 }
 
                 if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
                 {
                     Console.WriteLine($"Login failed: Password verification failed for user {loginDto.Email}");
-                    throw new UnauthorizedAccessException("Invalid email or password");
+                    throw new UnauthorizedAccessException("Incorrect password");
                 }
 
                 var token = GenerateJwtToken(user);

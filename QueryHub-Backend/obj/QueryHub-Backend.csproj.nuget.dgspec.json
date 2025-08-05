@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj": {}
+    "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj": {
+    "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
+        "projectUniqueName": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
         "projectName": "QueryHub-Backend",
-        "projectPath": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
+        "projectPath": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
         "packagesPath": "C:\\Users\\2317697\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\obj\\",
+        "outputPath": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\2317697\\AppData\\Roaming\\NuGet\\NuGet.Config",
