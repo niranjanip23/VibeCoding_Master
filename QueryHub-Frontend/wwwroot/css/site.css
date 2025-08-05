@@ -1,5 +1,12 @@
 /* QueryHub Custom Styles */
 
+/* Make search input placeholder visible in dark mode */
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #b0b0b0 !important;
+    opacity: 1 !important;
+}
+
 :root {
     --primary-color: #0d6efd;
     --success-color: #198754;
@@ -415,4 +422,91 @@ html {
     .share-msg {
         font-size: 0.75rem;
     }
+}
+
+/* Dark mode support */
+body.dark-mode {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    --light-color: #23272b;
+    --dark-color: #f8f9fa;
+    --border-radius: 8px;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.25);
+    background: #181a1b !important;
+    color: #f8f9fa !important;
+}
+
+body.dark-mode,
+body.dark-mode .card,
+body.dark-mode .modal-content {
+    background-color: #23272b !important;
+    color: #f8f9fa !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .footer,
+body.dark-mode .bg-light {
+    background-color: #181a1b !important;
+    color: #f8f9fa !important;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #23272b !important;
+    color: #f8f9fa !important;
+    border-color: #444;
+}
+
+body.dark-mode .btn,
+body.dark-mode .btn-outline-secondary {
+    background-color: #23272b;
+    color: #f8f9fa;
+    border-color: #444;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode .btn-success,
+body.dark-mode .btn-danger,
+body.dark-mode .btn-info {
+    color: #fff;
+}
+
+body.dark-mode .alert {
+    background-color: #23272b;
+    color: #f8f9fa;
+    border-color: #444;
+}
+
+body.dark-mode .badge {
+    background-color: #444;
+    color: #f8f9fa;
+}
+
+body.dark-mode pre,
+body.dark-mode code,
+body.dark-mode .hljs {
+    background: #181a1b !important;
+    color: #f8f9fa !important;
+}
+
+/* Dark mode toggle button styling */
+#darkModeToggle.nav-link {
+    color: #ffffff !important;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#darkModeToggle.nav-link:hover {
+    color: #ffc107 !important;
+}
+
+#darkModeToggle.nav-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
 }

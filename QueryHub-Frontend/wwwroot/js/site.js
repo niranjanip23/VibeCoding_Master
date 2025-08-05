@@ -39,6 +39,67 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Nav link clicked:', this.textContent.trim());
         });
     });
+
+    // Dark mode toggle functionality
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    
+    // Load dark mode CSS dynamically
+    const darkModeCssId = 'darkmode-css';
+    function loadDarkModeCss() {
+        if (!document.getElementById(darkModeCssId)) {
+            const link = document.createElement('link');
+            link.id = darkModeCssId;
+            link.rel = 'stylesheet';
+            link.href = '/css/darkmode.css';
+            document.head.appendChild(link);
+        }
+    }
+    
+    function unloadDarkModeCss() {
+        const link = document.getElementById(darkModeCssId);
+        if (link) link.remove();
+    }
+    
+    // Load saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+        loadDarkModeCss();
+        updateDarkModeIcon(true);
+    }
+    
+    // Dark mode toggle event listener
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                loadDarkModeCss();
+                updateDarkModeIcon(true);
+                showToast('Dark mode enabled', 'info');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                unloadDarkModeCss();
+                updateDarkModeIcon(false);
+                showToast('Dark mode disabled', 'info');
+            }
+        });
+    }
+    
+    // Update dark mode icon
+    function updateDarkModeIcon(isDarkMode) {
+        const icon = darkModeToggle?.querySelector('i');
+        if (icon) {
+            if (isDarkMode) {
+                icon.className = 'fas fa-sun';
+                darkModeToggle.title = 'Switch to light mode';
+            } else {
+                icon.className = 'fas fa-moon';
+                darkModeToggle.title = 'Switch to dark mode';
+            }
+        }
+    }
 });
 
 // Voting functionality
