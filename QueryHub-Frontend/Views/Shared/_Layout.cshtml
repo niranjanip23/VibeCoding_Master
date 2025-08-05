@@ -65,6 +65,19 @@
                         }
                     </ul>
                     
+                    <!-- Advanced Search Form -->
+                    <form class="d-flex me-3" asp-controller="Questions" asp-action="Index" method="get" id="headerSearchForm">
+                        <div class="input-group">
+                            <input class="form-control header-search-input" type="search" name="search" 
+                                   placeholder="Search..." 
+                                   value="@ViewData["SearchQuery"]" style="max-width: 300px;" autocomplete="off"
+                                   title="Advanced Search: [tag] for tags, @@username for authors, collective:&quot;name&quot; for groups, or any keyword">
+                            <button class="btn btn-outline-light header-search-button" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
                         {

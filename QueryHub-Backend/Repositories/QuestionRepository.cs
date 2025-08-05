@@ -89,29 +89,15 @@ namespace QueryHub_Backend.Repositories
             connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = @"
-                SELECT DISTINCT q.Id, q.Title, q.Description, q.Body, q.UserId, q.ViewCount, q.VoteCount, q.AnswerCount, q.CreatedAt, q.UpdatedAt, q.IsActive 
-                FROM Questions q
-                LEFT JOIN QuestionTags qt ON q.Id = qt.QuestionId
-                LEFT JOIN Tags t ON qt.TagId = t.Id
-                WHERE q.Title LIKE @searchTerm 
-                   OR q.Body LIKE @searchTerm 
-                   OR q.Description LIKE @searchTerm 
-                   OR t.Name LIKE @searchTerm
-                   OR t.Name LIKE @exactSearchTerm
-                ORDER BY 
-                    CASE 
-                        WHEN q.Title LIKE @exactSearchTerm THEN 1
-                        WHEN t.Name LIKE @exactSearchTerm THEN 2
-                        WHEN q.Title LIKE @searchTerm THEN 3
-                        WHEN t.Name LIKE @searchTerm THEN 4
-                        ELSE 5
-                    END,
-                    q.VoteCount DESC, 
-                    q.CreatedAt DESC";
             
-            command.Parameters.Add(new SqliteParameter("@searchTerm", $"%{searchTerm}%"));
-            command.Parameters.Add(new SqliteParameter("@exactSearchTerm", searchTerm));
+            // Parse search patterns
+            var (sql, parameters) = BuildAdvancedSearchQuery(searchTerm);
+            
+            command.CommandText = sql;
+            foreach (var param in parameters)
+            {
+                command.Parameters.Add(param);
+            }
 
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
@@ -120,6 +106,89 @@ namespace QueryHub_Backend.Repositories
             }
 
             return questions;
+        }
+
+        private (string sql, List<SqliteParameter> parameters) BuildAdvancedSearchQuery(string searchTerm)
+        {
+            var parameters = new List<SqliteParameter>();
+            var conditions = new List<string>();
+            var orderByConditions = new List<string>();
+            
+            // Base query
+            var baseQuery = @"
+                SELECT DISTINCT q.Id, q.Title, q.Description, q.Body, q.UserId, q.ViewCount, q.VoteCount, q.AnswerCount, q.CreatedAt, q.UpdatedAt, q.IsActive 
+                FROM Questions q
+                LEFT JOIN QuestionTags qt ON q.Id = qt.QuestionId
+                LEFT JOIN Tags t ON qt.TagId = t.Id
+                LEFT JOIN Users u ON q.UserId = u.Id";
+
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return ($"{baseQuery} ORDER BY q.VoteCount DESC, q.CreatedAt DESC", parameters);
+            }
+
+            var searchTermLower = searchTerm.ToLower().Trim();
+            var priorityLevel = 1;
+
+            // Pattern 1: [tag] - Search within a tag
+            if (searchTermLower.StartsWith("[") && searchTermLower.EndsWith("]"))
+            {
+                var tagName = searchTermLower.Substring(1, searchTermLower.Length - 2);
+                conditions.Add("LOWER(t.Name) LIKE @tagSearch");
+                parameters.Add(new SqliteParameter("@tagSearch", $"%{tagName}%"));
+                orderByConditions.Add($"CASE WHEN LOWER(t.Name) = @exactTag THEN {priorityLevel++} ELSE {priorityLevel + 10} END");
+                parameters.Add(new SqliteParameter("@exactTag", tagName));
+            }
+            // Pattern 2: @username - Search by author
+            else if (searchTermLower.StartsWith("@"))
+            {
+                var username = searchTermLower.Substring(1);
+                conditions.Add("LOWER(u.Username) LIKE @authorSearch");
+                parameters.Add(new SqliteParameter("@authorSearch", $"%{username}%"));
+                orderByConditions.Add($"CASE WHEN LOWER(u.Username) = @exactAuthor THEN {priorityLevel++} ELSE {priorityLevel + 10} END");
+                parameters.Add(new SqliteParameter("@exactAuthor", username));
+            }
+            // Pattern 3: collective:"Name" - Search collective content (placeholder for future feature)
+            else if (searchTermLower.StartsWith("collective:\"") && searchTermLower.EndsWith("\""))
+            {
+                var collectiveName = searchTermLower.Substring(12, searchTermLower.Length - 13);
+                // For now, search in question body for collective content
+                conditions.Add("LOWER(q.Body) LIKE @collectiveSearch");
+                parameters.Add(new SqliteParameter("@collectiveSearch", $"%{collectiveName}%"));
+                orderByConditions.Add($"CASE WHEN LOWER(q.Body) LIKE @exactCollectiveSearch THEN {priorityLevel++} ELSE {priorityLevel + 10} END");
+                parameters.Add(new SqliteParameter("@exactCollectiveSearch", $"%{collectiveName}%"));
+            }
+            // Pattern 4: Regular keyword search (title, body, description, tags)
+            else
+            {
+                var regularSearch = new List<string>
+                {
+                    "LOWER(q.Title) LIKE @searchTerm",
+                    "LOWER(q.Body) LIKE @searchTerm", 
+                    "LOWER(q.Description) LIKE @searchTerm",
+                    "LOWER(t.Name) LIKE @searchTerm"
+                };
+                
+                conditions.Add($"({string.Join(" OR ", regularSearch)})");
+                parameters.Add(new SqliteParameter("@searchTerm", $"%{searchTermLower}%"));
+                
+                // Add priority ordering for regular search
+                orderByConditions.Add($"CASE WHEN LOWER(q.Title) = @exactSearchTerm THEN {priorityLevel++} ELSE 999 END");
+                orderByConditions.Add($"CASE WHEN LOWER(t.Name) = @exactSearchTerm THEN {priorityLevel++} ELSE 999 END");
+                orderByConditions.Add($"CASE WHEN LOWER(q.Title) LIKE @exactSearchTerm THEN {priorityLevel++} ELSE 999 END");
+                orderByConditions.Add($"CASE WHEN LOWER(t.Name) LIKE @exactSearchTerm THEN {priorityLevel++} ELSE 999 END");
+                
+                parameters.Add(new SqliteParameter("@exactSearchTerm", searchTermLower));
+            }
+
+            var whereClause = conditions.Count > 0 ? $"WHERE {string.Join(" OR ", conditions)}" : "";
+            var orderByClause = orderByConditions.Count > 0 
+                ? $"ORDER BY {string.Join(", ", orderByConditions)}, q.VoteCount DESC, q.CreatedAt DESC"
+                : "ORDER BY q.VoteCount DESC, q.CreatedAt DESC";
+
+            var finalQuery = $"{baseQuery} {whereClause} {orderByClause}";
+            
+            return (finalQuery, parameters);
         }
 
         public async Task<IEnumerable<Question>> GetByTagAsync(string tagName)

@@ -171,6 +171,55 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Advanced search functionality for header search
+    const headerSearchForm = document.getElementById('headerSearchForm');
+    if (headerSearchForm) {
+        const headerSearchInput = headerSearchForm.querySelector('input[name="search"]');
+        
+        if (headerSearchInput) {
+            // Add search pattern help and autocomplete
+            headerSearchInput.addEventListener('input', function() {
+                const value = this.value;
+                updateSearchPlaceholder(this, value);
+            });
+            
+            headerSearchInput.addEventListener('focus', function() {
+                showAdvancedSearchHelp(this);
+            });
+            
+            // Add tooltip with search patterns
+            headerSearchInput.title = 'Advanced Search:\n[tag] - Search within tag\n@username - Search by author\ncollective:"name" - Search collective content\nkeyword - General search';
+        }
+    }
+
+    // Advanced search helper functions
+    function updateSearchPlaceholder(input, value) {
+        const originalPlaceholder = input.getAttribute('data-original-placeholder') || input.placeholder;
+        
+        if (!input.getAttribute('data-original-placeholder')) {
+            input.setAttribute('data-original-placeholder', originalPlaceholder);
+        }
+        
+        if (value.startsWith('[') && !value.endsWith(']')) {
+            input.placeholder = 'Tag search: [tagname]';
+        } else if (value.startsWith('@')) {
+            input.placeholder = 'Author search: @username';
+        } else if (value.startsWith('collective:')) {
+            input.placeholder = 'Collective search: collective:"name"';
+        } else if (value === '') {
+            input.placeholder = originalPlaceholder;
+        }
+    }
+    
+    function showAdvancedSearchHelp(input) {
+        // Log help patterns for console debugging
+        console.log('Advanced Search Patterns:');
+        console.log('• [tag] - Search within a specific tag (e.g., [python])');
+        console.log('• @username - Search by question author (e.g., @johndoe)');
+        console.log('• collective:"name" - Search collective content (e.g., collective:"web dev")');
+        console.log('• keyword - Search in titles, content, and tags');
+    }
+
     // ...existing code...
 });
 
