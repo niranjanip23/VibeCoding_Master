@@ -360,7 +360,7 @@ namespace QueryHub_Frontend.Services
                     endpoint = "/api/votes/answer";
                     voteRequest = new { 
                         AnswerId = answerId.Value, 
-                        VoteType = isUpvote ? 1 : -1  // 1 = Upvote, -1 = Downvote 
+                        VoteType = isUpvote ? 1 : -1  // Send as integer (1 = Upvote, -1 = Downvote)
                     };
                 }
                 else
@@ -369,19 +369,30 @@ namespace QueryHub_Frontend.Services
                     endpoint = "/api/votes/question";
                     voteRequest = new { 
                         QuestionId = questionId, 
-                        VoteType = isUpvote ? 1 : -1  // 1 = Upvote, -1 = Downvote
+                        VoteType = isUpvote ? 1 : -1  // Send as integer (1 = Upvote, -1 = Downvote)
                     };
                 }
 
                 var json = JsonSerializer.Serialize(voteRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+                _logger.LogInformation("Sending vote request to {Endpoint}: {Json}", endpoint, json);
                 var response = await _httpClient.PostAsync(endpoint, content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                
+                _logger.LogInformation("Vote response status: {StatusCode}, Content: {Content}", 
+                    response.StatusCode, responseContent);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Vote failed: {StatusCode} - {Content}", response.StatusCode, responseContent);
+                }
 
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Exception in VoteAsync");
                 return false;
             }
             finally
@@ -488,6 +499,7 @@ namespace QueryHub_Frontend.Services
                 Author = apiModel.Username,
                 CreatedAt = apiModel.CreatedAt,
                 Votes = apiModel.Votes,
+                AnswerVotes = apiModel.AnswerVotes,
                 Answers = apiModel.Answers?.Count ?? 0, // Count the actual answers from backend
                 Views = apiModel.Views
             };
@@ -517,7 +529,7 @@ namespace QueryHub_Frontend.Services
                 Content = apiModel.Body,
                 Author = apiModel.Username,
                 CreatedAt = apiModel.CreatedAt,
-                Votes = apiModel.VoteCount,
+                Votes = apiModel.Votes, // Changed from VoteCount to Votes
                 QuestionId = apiModel.QuestionId
             };
         }

@@ -57,24 +57,7 @@ namespace QueryHub_Backend.Services
 
             foreach (var question in questions)
             {
-                var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
-                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
-                var user = await _userRepository.GetByIdAsync(question.UserId);
-                
-                questionDtos.Add(new QuestionDto
-                {
-                    Id = question.Id,
-                    Title = question.Title,
-                    Body = question.Body,
-                    UserId = question.UserId,
-                    Username = user?.Username ?? "Unknown User",
-                    CreatedAt = question.CreatedAt,
-                    UpdatedAt = question.UpdatedAt,
-                    Views = question.Views,
-                    Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList(),
-                    Answers = answers.ToList()
-                });
+                questionDtos.Add(await MapToQuestionDto(question));
             }
 
             return questionDtos;
@@ -117,24 +100,7 @@ namespace QueryHub_Backend.Services
 
             foreach (var question in questions)
             {
-                var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
-                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
-                var user = await _userRepository.GetByIdAsync(question.UserId);
-                
-                questionDtos.Add(new QuestionDto
-                {
-                    Id = question.Id,
-                    Title = question.Title,
-                    Body = question.Body,
-                    UserId = question.UserId,
-                    Username = user?.Username ?? "Unknown User",
-                    CreatedAt = question.CreatedAt,
-                    UpdatedAt = question.UpdatedAt,
-                    Views = question.Views,
-                    Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList(),
-                    Answers = answers.ToList()
-                });
+                questionDtos.Add(await MapToQuestionDto(question));
             }
 
             return questionDtos;
@@ -147,24 +113,7 @@ namespace QueryHub_Backend.Services
 
             foreach (var question in questions)
             {
-                var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
-                var answers = await _answerService.GetByQuestionIdAsync(question.Id);
-                var user = await _userRepository.GetByIdAsync(question.UserId);
-                
-                questionDtos.Add(new QuestionDto
-                {
-                    Id = question.Id,
-                    Title = question.Title,
-                    Body = question.Body,
-                    UserId = question.UserId,
-                    Username = user?.Username ?? "Unknown User",
-                    CreatedAt = question.CreatedAt,
-                    UpdatedAt = question.UpdatedAt,
-                    Views = question.Views,
-                    Votes = question.VoteCount,
-                    Tags = tags.Select(t => t.Name).ToList(),
-                    Answers = answers.ToList()
-                });
+                questionDtos.Add(await MapToQuestionDto(question));
             }
 
             return questionDtos;
@@ -300,6 +249,32 @@ namespace QueryHub_Backend.Services
             }
 
             await _questionRepository.DeleteAsync(id);
+        }
+
+        private async Task<QuestionDto> MapToQuestionDto(Question question)
+        {
+            var tags = await _tagRepository.GetByQuestionIdAsync(question.Id);
+            var answers = await _answerService.GetByQuestionIdAsync(question.Id);
+            var user = await _userRepository.GetByIdAsync(question.UserId);
+            
+            // Calculate total votes from all answers
+            var totalAnswerVotes = answers.Sum(a => a.Votes);
+            
+            return new QuestionDto
+            {
+                Id = question.Id,
+                Title = question.Title,
+                Body = question.Body,
+                UserId = question.UserId,
+                Username = user?.Username ?? "Unknown User",
+                CreatedAt = question.CreatedAt,
+                UpdatedAt = question.UpdatedAt,
+                Views = question.Views,
+                Votes = question.VoteCount,
+                AnswerVotes = totalAnswerVotes,
+                Tags = tags.Select(t => t.Name).ToList(),
+                Answers = answers.ToList()
+            };
         }
     }
 }

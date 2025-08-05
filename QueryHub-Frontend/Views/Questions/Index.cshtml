@@ -72,9 +72,20 @@
                         <div class="col-md-1 text-center">
                             <div class="question-stats">
                                 <div class="stat-item">
-                                    <div class="stat-number text-primary">@question.Votes</div>
-                                    <div class="stat-label">votes</div>
+                                    <div class="stat-number text-primary">
+                                        <i class="fas fa-thumbs-up me-1"></i>@question.Votes
+                                    </div>
+                                    <div class="stat-label">question votes</div>
                                 </div>
+                                @if (question.AnswerVotes > 0)
+                                {
+                                    <div class="stat-item">
+                                        <div class="stat-number text-info">
+                                            <i class="fas fa-comment-dots me-1"></i>@question.AnswerVotes
+                                        </div>
+                                        <div class="stat-label">answer votes</div>
+                                    </div>
+                                }
                                 <div class="stat-item @(question.IsAnswered ? "answered" : "")">
                                     <div class="stat-number @(question.IsAnswered ? "text-success" : "text-muted")">
                                         @question.AnswerCount

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "h+hD2dZlfJw=",
+  "dgSpecHash": "5zVWNgOHYQo=",
   "success": true,
-  "projectFilePath": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\QueryHub-Frontend.csproj",
+  "projectFilePath": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\QueryHub-Frontend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\2317697\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],

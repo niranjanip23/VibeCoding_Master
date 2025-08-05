@@ -105,6 +105,8 @@ namespace QueryHub_Backend.Services
 
         public async Task<VoteDto> VoteOnAnswerAsync(VoteAnswerDto voteDto, int userId)
         {
+            Console.WriteLine($"VoteService.VoteOnAnswerAsync: AnswerId={voteDto.AnswerId}, VoteType={voteDto.VoteType}, UserId={userId}");
+            
             // Check if user has already voted on this answer
             var existingVote = await _voteRepository.GetByUserAndAnswerAsync(userId, voteDto.AnswerId);
             

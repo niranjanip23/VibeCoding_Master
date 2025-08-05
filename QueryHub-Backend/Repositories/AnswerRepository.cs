@@ -152,7 +152,7 @@ namespace QueryHub_Backend.Repositories
             var command = connection.CreateCommand();
             command.CommandText = @"
                 UPDATE Answers 
-                SET Votes = Votes + @voteChange 
+                SET VoteCount = VoteCount + @voteChange 
                 WHERE Id = @answerId";
             command.Parameters.Add(new SqliteParameter("@answerId", answerId));
             command.Parameters.Add(new SqliteParameter("@voteChange", voteChange));

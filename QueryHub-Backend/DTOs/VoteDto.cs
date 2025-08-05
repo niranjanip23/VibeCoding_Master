@@ -9,7 +9,7 @@ namespace QueryHub_Backend.DTOs
         public int QuestionId { get; set; }
         
         [Required]
-        public VoteType VoteType { get; set; } // 1 = Upvote, 2 = Downvote
+        public VoteType VoteType { get; set; } // 1 = Upvote, -1 = Downvote (matching enum)
     }
     
     public class VoteAnswerDto
@@ -18,7 +18,7 @@ namespace QueryHub_Backend.DTOs
         public int AnswerId { get; set; }
         
         [Required]
-        public VoteType VoteType { get; set; } // 1 = Upvote, 2 = Downvote
+        public VoteType VoteType { get; set; } // 1 = Upvote, -1 = Downvote (matching enum)
     }
     
     public class VoteDto

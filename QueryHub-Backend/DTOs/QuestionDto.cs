@@ -37,6 +37,7 @@ namespace QueryHub_Backend.DTOs
         public string Username { get; set; } = string.Empty;
         public int Views { get; set; }
         public int Votes { get; set; }
+        public int AnswerVotes { get; set; } = 0; // Total votes from all answers
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<string> Tags { get; set; } = new List<string>();

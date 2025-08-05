@@ -329,3 +329,43 @@ footer a:hover {
 ::-webkit-scrollbar-thumb:hover {
     background: #adb5bd;
 }
+
+/* Enhanced Vote Statistics */
+.question-stats .stat-item {
+    min-width: 80px;
+    margin-bottom: 0.25rem;
+}
+
+.question-stats .stat-number i {
+    font-size: 0.9rem;
+}
+
+.question-stats .stat-item:first-of-type {
+    background: #e7f3ff;
+    border: 1px solid #b3d7ff;
+}
+
+.question-stats .stat-item:nth-of-type(2) {
+    background: #e0f7fa;
+    border: 1px solid #b2ebf2;
+}
+
+.question-stats .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Responsive adjustments for vote stats */
+@media (max-width: 768px) {
+    .question-stats {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 0.25rem;
+    }
+    
+    .question-stats .stat-item {
+        min-width: 60px;
+        font-size: 0.8rem;
+    }
+}

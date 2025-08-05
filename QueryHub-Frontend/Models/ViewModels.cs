@@ -13,6 +13,7 @@ namespace QueryHub_Frontend.Models
         public DateTime CreatedAt { get; set; }
         public DateTime CreatedDate => CreatedAt; // Alias for compatibility
         public int Votes { get; set; }
+        public int AnswerVotes { get; set; } = 0; // Total votes from all answers
         public int Answers { get; set; }
         public int AnswerCount => Answers; // Alias for compatibility
         public int Views { get; set; }

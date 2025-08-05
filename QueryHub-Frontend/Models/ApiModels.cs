@@ -9,6 +9,7 @@ namespace QueryHub_Frontend.Models
         public string Username { get; set; } = "";
         public int Views { get; set; }
         public int Votes { get; set; }
+        public int AnswerVotes { get; set; } = 0; // Total votes from all answers
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
@@ -36,7 +37,7 @@ namespace QueryHub_Frontend.Models
         public string Body { get; set; } = "";
         public string Username { get; set; } = "";
         public DateTime CreatedAt { get; set; }
-        public int VoteCount { get; set; }
+        public int Votes { get; set; } // Changed from VoteCount to match API response
         public int QuestionId { get; set; }
         public bool IsAccepted { get; set; } = false;
     }

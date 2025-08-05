@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RUVUeFfDQh0=",
+  "dgSpecHash": "5R4YlLT8Ack=",
   "success": true,
-  "projectFilePath": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
+  "projectFilePath": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Backend\\QueryHub-Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\2317697\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\2317697\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.10\\microsoft.aspnetcore.authentication.jwtbearer.8.0.10.nupkg.sha512",

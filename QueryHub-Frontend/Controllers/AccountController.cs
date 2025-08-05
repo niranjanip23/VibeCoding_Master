@@ -179,7 +179,7 @@ namespace QueryHub_Frontend.Controllers
                             if (!string.IsNullOrEmpty(answer.Username) && answer.Username.Equals(currentUsername, StringComparison.OrdinalIgnoreCase))
                             {
                                 answersGiven++;
-                                totalAnswerVotes += answer.VoteCount;
+                                totalAnswerVotes += answer.Votes; // Changed from VoteCount to Votes
                                 if (answer.IsAccepted) acceptedAnswers++;
                                 
                                 userAnswers.Add(new {
@@ -188,7 +188,7 @@ namespace QueryHub_Frontend.Controllers
                                     CreatedDate = answer.CreatedAt,
                                     Id = answer.Id,
                                     QuestionId = question.Id,
-                                    Votes = answer.VoteCount,
+                                    Votes = answer.Votes, // Changed from VoteCount to Votes
                                     IsAccepted = answer.IsAccepted
                                 });
                             }
@@ -300,7 +300,7 @@ namespace QueryHub_Frontend.Controllers
                             if (!string.IsNullOrEmpty(answer.Username) && answer.Username.Equals(username, StringComparison.OrdinalIgnoreCase))
                             {
                                 answersGiven++;
-                                totalAnswerVotes += answer.VoteCount;
+                                totalAnswerVotes += answer.Votes; // Changed from VoteCount to Votes
                                 if (answer.IsAccepted) acceptedAnswers++;
                                 
                                 userAnswers.Add(new {
@@ -309,7 +309,7 @@ namespace QueryHub_Frontend.Controllers
                                     CreatedDate = answer.CreatedAt,
                                     Id = answer.Id,
                                     QuestionId = question.Id,
-                                    Votes = answer.VoteCount,
+                                    Votes = answer.Votes, // Changed from VoteCount to Votes
                                     IsAccepted = answer.IsAccepted
                                 });
                             }

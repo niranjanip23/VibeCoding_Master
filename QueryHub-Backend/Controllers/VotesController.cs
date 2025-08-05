@@ -67,14 +67,19 @@ namespace QueryHub_Backend.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    var errors = ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage);
+                    Console.WriteLine($"Model validation failed: {string.Join(", ", errors)}");
+                    return BadRequest(new { message = "Model validation failed", errors = ModelState });
                 }
 
                 var userId = GetUserIdFromClaims();
                 if (!userId.HasValue)
                 {
+                    Console.WriteLine("User ID not found in token claims");
                     return Unauthorized(new { message = "User ID not found in token" });
                 }
+
+                Console.WriteLine($"VoteOnAnswer: AnswerId={voteDto.AnswerId}, VoteType={voteDto.VoteType}, UserId={userId.Value}");
 
                 var vote = await _voteService.VoteOnAnswerAsync(voteDto, userId.Value);
                 
@@ -87,10 +92,13 @@ namespace QueryHub_Backend.Controllers
             }
             catch (ArgumentException ex)
             {
+                Console.WriteLine($"ArgumentException in VoteOnAnswer: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Exception in VoteOnAnswer: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return StatusCode(500, new { message = "An error occurred while voting", error = ex.Message });
             }
         }

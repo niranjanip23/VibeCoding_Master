@@ -1,19 +1,23 @@
 {
   "Files": [
     {
-      "Id": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\css\\site.css",
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\js\\questions.js",
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\js\\questions.js",
       "PackagePath": "staticwebassets\\js\\questions.js"
     },
     {
-      "Id": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\js\\site.js",
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
-      "Id": "c:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\test.html",
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\test-points.html",
+      "PackagePath": "staticwebassets\\test-points.html"
+    },
+    {
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\test.html",
       "PackagePath": "staticwebassets\\test.html"
     },
     {

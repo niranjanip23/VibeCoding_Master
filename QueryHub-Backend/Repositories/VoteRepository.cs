@@ -38,6 +38,8 @@ namespace QueryHub_Backend.Repositories
 
         public async Task<Vote?> GetByUserAndAnswerAsync(int userId, int answerId)
         {
+            Console.WriteLine($"VoteRepository.GetByUserAndAnswerAsync: userId={userId}, answerId={answerId}");
+            
             using var connection = _connectionFactory.CreateConnection();
             connection.Open();
 
@@ -52,9 +54,12 @@ namespace QueryHub_Backend.Repositories
             using var reader = await command.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
-                return MapVote(reader);
+                var existingVote = MapVote(reader);
+                Console.WriteLine($"VoteRepository.GetByUserAndAnswerAsync: Found existing vote ID={existingVote.Id}");
+                return existingVote;
             }
 
+            Console.WriteLine($"VoteRepository.GetByUserAndAnswerAsync: No existing vote found");
             return null;
         }
 
@@ -93,8 +98,24 @@ namespace QueryHub_Backend.Repositories
             var command = connection.CreateCommand();
             
             // Determine TargetId and TargetType based on vote properties
-            int targetId = vote.QuestionId ?? vote.AnswerId ?? 0;
-            int targetType = vote.QuestionId.HasValue ? 1 : 2; // 1=Question, 2=Answer
+            // Priority: if AnswerId is set, it's an answer vote; otherwise it's a question vote
+            int targetId, targetType;
+            if (vote.AnswerId.HasValue)
+            {
+                targetId = vote.AnswerId.Value;
+                targetType = 2; // Answer
+            }
+            else if (vote.QuestionId.HasValue)
+            {
+                targetId = vote.QuestionId.Value;
+                targetType = 1; // Question
+            }
+            else
+            {
+                throw new ArgumentException("Vote must have either QuestionId or AnswerId");
+            }
+            
+            Console.WriteLine($"VoteRepository.CreateAsync: targetId={targetId}, targetType={targetType}, UserId={vote.UserId}, VoteType={vote.VoteType}");
             
             command.CommandText = @"
                 INSERT INTO Votes (UserId, TargetId, TargetType, VoteType, CreatedAt)
@@ -181,7 +202,7 @@ namespace QueryHub_Backend.Repositories
             {
                 Id = reader.GetInt32("Id"),
                 UserId = reader.GetInt32("UserId"),
-                QuestionId = reader.GetInt32("QuestionId"),
+                QuestionId = reader.IsDBNull("QuestionId") ? null : reader.GetInt32("QuestionId"),
                 AnswerId = reader.IsDBNull("AnswerId") ? null : reader.GetInt32("AnswerId"),
                 VoteType = (VoteType)reader.GetInt32("VoteType"),
                 CreatedAt = reader.GetDateTime("CreatedAt")
