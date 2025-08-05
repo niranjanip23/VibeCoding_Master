@@ -90,11 +90,28 @@ namespace QueryHub_Backend.Repositories
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, Title, Description, Body, UserId, ViewCount, VoteCount, AnswerCount, CreatedAt, UpdatedAt, IsActive 
-                FROM Questions 
-                WHERE Title LIKE @searchTerm OR Body LIKE @searchTerm OR Description LIKE @searchTerm 
-                ORDER BY VoteCount DESC, CreatedAt DESC";
+                SELECT DISTINCT q.Id, q.Title, q.Description, q.Body, q.UserId, q.ViewCount, q.VoteCount, q.AnswerCount, q.CreatedAt, q.UpdatedAt, q.IsActive 
+                FROM Questions q
+                LEFT JOIN QuestionTags qt ON q.Id = qt.QuestionId
+                LEFT JOIN Tags t ON qt.TagId = t.Id
+                WHERE q.Title LIKE @searchTerm 
+                   OR q.Body LIKE @searchTerm 
+                   OR q.Description LIKE @searchTerm 
+                   OR t.Name LIKE @searchTerm
+                   OR t.Name LIKE @exactSearchTerm
+                ORDER BY 
+                    CASE 
+                        WHEN q.Title LIKE @exactSearchTerm THEN 1
+                        WHEN t.Name LIKE @exactSearchTerm THEN 2
+                        WHEN q.Title LIKE @searchTerm THEN 3
+                        WHEN t.Name LIKE @searchTerm THEN 4
+                        ELSE 5
+                    END,
+                    q.VoteCount DESC, 
+                    q.CreatedAt DESC";
+            
             command.Parameters.Add(new SqliteParameter("@searchTerm", $"%{searchTerm}%"));
+            command.Parameters.Add(new SqliteParameter("@exactSearchTerm", searchTerm));
 
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())

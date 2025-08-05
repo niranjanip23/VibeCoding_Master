@@ -27,11 +27,11 @@
 <!-- Filters and Search -->
 <div class="row mb-4">
     <div class="col-md-8">
-        <form method="get" class="d-flex gap-2">
-            <input type="text" name="search" class="form-control" placeholder="Search questions..." 
-                   value="@Model.SearchQuery">
+        <form method="get" action="@Url.Action("Index", "Questions")" class="search-form d-flex gap-2" autocomplete="off">
+            <input type="text" name="search" class="form-control search-input" placeholder="Search questions..." 
+                   value="@Model.SearchQuery" autocomplete="off">
             <input type="hidden" name="tag" value="@Model.SelectedTag">
-            <button type="submit" class="btn btn-outline-primary">
+            <button type="submit" class="btn btn-outline-primary search-button">
                 <i class="fas fa-search"></i>
             </button>
             @if (!string.IsNullOrEmpty(Model.SearchQuery) || !string.IsNullOrEmpty(Model.SelectedTag))

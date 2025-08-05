@@ -100,6 +100,78 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
+    
+    // Search form handling
+    const searchForms = document.querySelectorAll('form[method="get"]');
+    searchForms.forEach(form => {
+        const searchInput = form.querySelector('input[name="search"]');
+        const submitButton = form.querySelector('button[type="submit"]');
+        let isSubmitting = false;
+        
+        // Handle Enter key press
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (!isSubmitting) {
+                        console.log('Search form submitted via Enter key');
+                        submitSearchForm(form);
+                    }
+                }
+            });
+        }
+        
+        // Handle button click
+        if (submitButton) {
+            submitButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!isSubmitting) {
+                    console.log('Search form submitted via button click');
+                    submitSearchForm(form);
+                }
+            });
+        }
+        
+        // Prevent form's default submission to avoid conflicts
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!isSubmitting) {
+                console.log('Search form submitted via form submit event');
+                submitSearchForm(form);
+            }
+        });
+        
+        // Function to handle form submission
+        function submitSearchForm(form) {
+            if (isSubmitting) return;
+            
+            isSubmitting = true;
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            }
+            
+            // Get form data
+            const formData = new FormData(form);
+            const searchTerm = formData.get('search') || '';
+            const tagTerm = formData.get('tag') || '';
+            
+            // Build URL
+            const params = new URLSearchParams();
+            if (searchTerm.trim()) params.append('search', searchTerm.trim());
+            if (tagTerm.trim()) params.append('tag', tagTerm.trim());
+            
+            const baseUrl = form.action || '/Questions';
+            const url = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+            
+            console.log('Navigating to:', url);
+            
+            // Navigate to the search results
+            window.location.href = url;
+        }
+    });
+
+    // ...existing code...
 });
 
 // Voting functionality
