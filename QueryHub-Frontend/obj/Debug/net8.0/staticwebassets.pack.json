@@ -9,6 +9,14 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\images\\README.md",
+      "PackagePath": "staticwebassets\\images\\README.md"
+    },
+    {
+      "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\images\\code-block.svg",
+      "PackagePath": "staticwebassets\\images\\code-block.svg"
+    },
+    {
       "Id": "C:\\Users\\2317697\\OneDrive - Cognizant\\Desktop\\CC\\VibeCoding_Master-1\\QueryHub-Frontend\\wwwroot\\js\\questions.js",
       "PackagePath": "staticwebassets\\js\\questions.js"
     },

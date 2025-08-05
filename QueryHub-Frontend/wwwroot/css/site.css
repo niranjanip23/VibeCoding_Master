@@ -207,10 +207,35 @@ body {
 /* Footer */
 footer {
     margin-top: auto;
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%) !important;
 }
 
 footer a:hover {
     color: var(--info-color) !important;
+}
+
+footer h5 {
+    color: #ffffff !important;
+}
+
+footer p {
+    color: #adb5bd !important;
+}
+
+footer a {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #FFD600 !important;
+    text-decoration: none !important;
+}
+
+/* Ensure footer links are always white */
+footer small a,
+footer .text-white {
+    color: #ffffff !important;
 }
 
 /* Pagination */
@@ -492,21 +517,32 @@ body.dark-mode .hljs {
     color: #f8f9fa !important;
 }
 
-/* Dark mode toggle button styling */
-#darkModeToggle.nav-link {
-    color: #ffffff !important;
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.3s ease;
+/* Dark mode footer adjustments */
+body.dark-mode footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
 }
 
-#darkModeToggle.nav-link:hover {
-    color: #ffc107 !important;
+body.dark-mode footer h5 {
+    color: #f8f9fa !important;
 }
 
-#darkModeToggle.nav-link:focus {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+body.dark-mode footer p {
+    color: #ced4da !important;
+}
+
+/* Footer enhancements */
+.animated-logo {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

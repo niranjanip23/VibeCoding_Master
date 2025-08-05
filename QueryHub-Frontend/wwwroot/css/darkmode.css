@@ -303,3 +303,35 @@ body.dark-mode #darkModeToggle.nav-link {
 body.dark-mode #darkModeToggle.nav-link:hover {
     color: #fbbf24 !important;
 }
+
+/* Footer dark mode enhancements */
+body.dark-mode footer {
+    background: linear-gradient(135deg, #0d1117 0%, #21262d 100%) !important;
+    border-top: 1px solid #30363d !important;
+}
+
+body.dark-mode footer h5 {
+    color: #f0f6fc !important;
+}
+
+body.dark-mode footer h5 span {
+    color: #ffd700 !important;
+}
+
+body.dark-mode footer p {
+    color: #8b949e !important;
+}
+
+body.dark-mode footer a {
+    color: #ffffff !important;
+}
+
+body.dark-mode footer a:hover {
+    color: #ffd700 !important;
+}
+
+/* Ensure footer links are always white in dark mode */
+body.dark-mode footer small a,
+body.dark-mode footer .text-white {
+    color: #ffffff !important;
+}

@@ -1,0 +1,19 @@
+<!-- This is a placeholder for the animated GIF -->
+<!-- Please replace this with your actual code-block.gif file -->
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .code-text { font-family: monospace; font-size: 12px; fill: #00ff00; }
+      .bg { fill: #1a1a1a; }
+      .border { fill: none; stroke: #333; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect class="bg" width="100" height="100" rx="5"/>
+  <rect class="border" width="100" height="100" rx="5"/>
+  <text class="code-text" x="10" y="20">&lt;code&gt;</text>
+  <text class="code-text" x="15" y="35">function() {</text>
+  <text class="code-text" x="20" y="50">  return</text>
+  <text class="code-text" x="20" y="65">  "Hello!";</text>
+  <text class="code-text" x="15" y="80">}</text>
+  <text class="code-text" x="10" y="95">&lt;/code&gt;</text>
+</svg>
