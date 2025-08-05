@@ -409,4 +409,83 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Share button functionality
+    document.addEventListener('click', function(e) {
+        const shareBtn = e.target.closest('.share-btn');
+        if (shareBtn) {
+            e.preventDefault();
+            
+            const type = shareBtn.getAttribute('data-type');
+            const id = shareBtn.getAttribute('data-id');
+            let url = window.location.origin;
+            
+            if (type === 'question') {
+                // For questions, create a direct URL to the question details page
+                url += `/Questions/Details/${id}`;
+            } else if (type === 'answer') {
+                // For answers, use current page URL and add anchor to specific answer
+                url = window.location.href.split('#')[0].replace(/#.*$/, '');
+                url += `#answer-${id}`;
+            }
+            
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function() {
+                    // Show success feedback
+                    showShareFeedback(shareBtn, 'Link copied!', 'success');
+                }).catch(function(err) {
+                    console.error('Failed to copy link: ', err);
+                    // Fallback to manual copy
+                    showManualCopyPrompt(url);
+                });
+            } else {
+                // Fallback for browsers that don't support clipboard API
+                showManualCopyPrompt(url);
+            }
+        }
+    });
 });
+
+// Helper function to show share feedback
+function showShareFeedback(shareBtn, message, type) {
+    const msg = shareBtn.parentElement.querySelector('.share-msg');
+    if (msg) {
+        msg.textContent = message;
+        msg.className = `share-msg text-${type === 'success' ? 'success' : 'warning'} ms-2`;
+        msg.style.display = 'inline';
+        
+        // Hide the message after 3 seconds
+        setTimeout(() => {
+            msg.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// Helper function to show manual copy prompt
+function showManualCopyPrompt(url) {
+    // Create a temporary input element
+    const tempInput = document.createElement('input');
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+    
+    try {
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // For mobile devices
+        
+        // Try to copy using the deprecated execCommand as fallback
+        const successful = document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        if (successful) {
+            showToast('Link copied to clipboard!', 'success');
+        } else {
+            // Show prompt dialog if all else fails
+            window.prompt('Copy this link to your clipboard: Ctrl+C (Cmd+C on Mac), then press Enter', url);
+        }
+    } catch (err) {
+        document.body.removeChild(tempInput);
+        // Show prompt dialog as final fallback
+        window.prompt('Copy this link to your clipboard: Ctrl+C (Cmd+C on Mac), then press Enter', url);
+    }
+}

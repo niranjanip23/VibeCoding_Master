@@ -105,9 +105,10 @@
                                 <i class="fas fa-comment me-1"></i>Add Comment
                             </button>
                             *@
-                            <button class="btn btn-sm btn-outline-secondary">
+                            <button class="btn btn-sm btn-outline-secondary share-btn" data-type="question" data-id="@Model.Id">
                                 <i class="fas fa-share me-1"></i>Share
                             </button>
+                            <span class="share-msg text-success ms-2" style="display:none;">Link copied!</span>
                         }
                     </div>
                     <div class="user-info text-end">
@@ -172,7 +173,7 @@
     
     @foreach (var answer in Model.Answers)
     {
-        <div class="row mb-4">
+        <div class="row mb-4" id="answer-@answer.Id">
             <div class="col-md-1 text-center">
                 <!-- Answer Voting -->
                 <div class="vote-section" data-answer-id="@answer.Id">
@@ -243,9 +244,10 @@
                                         <i class="fas fa-comment me-1"></i>Add Comment
                                     </button>
                                     *@
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button class="btn btn-sm btn-outline-secondary share-btn" data-type="answer" data-id="@answer.Id">
                                         <i class="fas fa-share me-1"></i>Share
                                     </button>
+                                    <span class="share-msg text-success ms-2" style="display:none;">Link copied!</span>
                                 }
                             </div>
                             <div class="user-info text-end">
